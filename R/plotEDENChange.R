@@ -104,9 +104,9 @@ plotEDENChange <- function(EDEN_date    = Sys.Date(), # format = '%Y-%m-%d'
   ) # turn off legend border
   raster::plot(pp, add = TRUE)
   if (grepl(x = class(addToPlot), pattern = "SpatialPolygonsDataFrame|SpatialPointsDataFrame")) {
-    sfwmd.shp <- sp::spTransform(sfwmd.shp, raster::crs(fireHydro::edenDEM))
-    sfwmd.shp <- raster::crop(x = sfwmd.shp, y = recRatesReclassed)
-    raster::plot(sfwmd.shp, add = TRUE)
+    addToPlot <- sp::spTransform(addToPlot, raster::crs(fireHydro::edenDEM))
+    addToPlot <- raster::crop(x = addToPlot, y = recRatesReclassed)
+    raster::plot(addToPlot, add = TRUE)
   }
   if (!is.null(plotOutput)) {
     grDevices::dev.off()
