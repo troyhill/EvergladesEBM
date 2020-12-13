@@ -65,7 +65,7 @@ plotEDENChange <- function(EDEN_date    = Sys.Date(), # format = '%Y-%m-%d'
   timePeriod <- as.numeric(as.Date(eden1$date, format = "%Y%m%d") - as.Date(eden2$date, format = "%Y%m%d")) / 7 
   
   ### plot prep: create EDEN boundary, set title, etc.
-  mainTitle <- paste("Stage change (in/wk)\n", as.Date(eden2$date, format = "%Y%m%d"), "to", as.Date(eden1$date, format = "%Y%m%d"))
+  mainTitle <- paste("Recession/ascension rate categories \n", as.Date(eden2$date, format = "%Y%m%d"), "to", as.Date(eden1$date, format = "%Y%m%d"))
   r <- raster::reclassify(eden2$data, cbind(-Inf, Inf, 1))
   # convert to polygons (you need to have package 'rgeos' installed for this to work)
   pp <- raster::rasterToPolygons(r, dissolve=TRUE)
