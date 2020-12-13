@@ -12,7 +12,7 @@ License: file LICENSE
 URL: https://github.com/troyhill/EvergladesEBM
 LazyData: true
 Remotes:
-    troyhill/fireHydro
+    troyhill/fireHydro,
     troyhill/RSM
 Depends:
     R (>= 3.5.0),
