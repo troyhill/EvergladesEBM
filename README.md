@@ -36,4 +36,4 @@ library(EvergladesEBM)
 
 <img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recession_EDEN_twoWeeks.png" width="375" height="450" /> <img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recessionRates.png" width="375" height="450" />
 
-Figure 1. Recession rates (inches/week; left side) and as categorized based on Everglades Ecosystem-Based Management recommendations
+Figure 1. Recession rates (inches/week; left side) and categorizations based on Everglades Ecosystem-Based Management recommendations (right).
