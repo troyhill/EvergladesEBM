@@ -1,0 +1,30 @@
+Package: EvergladesEBM
+Type: Package
+Title: Everglades Ecosystem-Based Management
+Version: 0.0.01
+Date: 2020-12-13
+Authors@R: c(
+    person("Troy", "Hill", role = c("ctb", "cre"), email = "Hill.Troy@gmail.com", comment = c(ORCID = "0000-0003-2980-4099"))
+    )
+BugReports: https://github.com/troyhill/EvergladesEBM/issues
+Description: Analytical tools supporting ecosystem based management in south Florida. Tools for analysis of EDEN water level data and USGS-JEM EverForecast simulations.
+License: file LICENSE
+URL: https://github.com/troyhill/EvergladesEBM
+LazyData: true
+Remotes:
+    troyhill/fireHydro
+    troyhill/RSM
+Depends:
+    R (>= 3.5.0),
+    fireHydro,
+    sp,
+    raster,
+    plyr,
+    ggplot2
+RoxygenNote: 7.1.1
+Suggests: 
+    covr,
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
