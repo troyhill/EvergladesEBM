@@ -34,12 +34,12 @@ library(EvergladesEBM)
 
 &nbsp;
 
-<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recession_EDEN_twoWeeks.png" width="562" height="675" />
+<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recession_EDEN_twoWeeks.png" width="375" height="450" />
 Figure 1. Recession rates (inches/week) in south Florida
 
 &nbsp;
 
 
-<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recessionRates.png" width="562" height="675" />
+<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recessionRates.png" width="375" height="450" />
 
 Figure 2. Categorization of recession rates based on Everglades Ecosystem-Based Management recommendations
