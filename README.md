@@ -40,6 +40,6 @@ Figure 1. Recession rates (inches/week) in south Florida
 &nbsp;
 
 
-<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recessionRates.gif" width="562" height="675" />
+<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recessionRates.png" width="562" height="675" />
 
 Figure 2. Categorization of recession rates based on Everglades Ecosystem-Based Management recommendations
