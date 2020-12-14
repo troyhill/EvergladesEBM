@@ -56,7 +56,7 @@ loadSims <- function(directory = file.choose()
   ### convert to feet NGVD29
   altQ_ngvd4  <- lapply(altQ_ngvd3, function(x.stack) raster::overlay(x.stack, dem_ngvd, fun=function(r1, r2){return(r1 + r2)}))
   ### rename layers to include date in layer name)
-  altQDat     <- lapply(X = altQ_ngvd4, function(x) {names(x) <- labels(altQ_dat[[1]]); return(x)})
+  altQDat     <- lapply(X = altQ_ngvd4, function(x) {names(x) <- names(altQ_dat[[1]]); return(x)})
   # save("altQDat", file = "G:/data/ever4cast/20201101/altQ/ever4cast_altq.RData")
   
   return(altQDat)

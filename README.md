@@ -28,6 +28,17 @@ EvergladesEBM can be used for post-processing model output and making direct com
 ```
 library(EvergladesEBM)
 
+### map of recession rates over past two weeks
+### function is highly flexible - see ?plotEDENChange for options
+twoWeeks <- plotEDENChange(EDEN_date = Sys.Date(), 
+           changePeriod = 2, # weeks
+           addToPlot = sfwmd)
+           
+### recession/ascension during past month
+pastMonth <- plotEDENChange(EDEN_date = Sys.Date(), 
+           changePeriod = 4, # weeks
+           addToPlot = sfwmd)
+
 ```
 
 ### Output example: Regional ascension/recession rates
