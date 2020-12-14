@@ -41,7 +41,7 @@ pastMonth <- plotEDENChange(EDEN_date = Sys.Date(),
 
 ```
 
-### Output: Regional ascension/recession rates
+## Output: Regional ascension/recession rates
 
 &nbsp;
 
@@ -52,8 +52,12 @@ Figure 1. Recession rates (inches/week; left side) and categorizations based on 
 
 &nbsp;
 
-<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/forecast_TreeIsland_HighWaterPM.png" width="600" height="360" /> <img 
+## Output: Position analysis using EverForecast output
 
-Figure 2. Distribution of future water levels predicted by EverForeCast simulations. Horizontal line shows the ecological target for tree island inundation (objective: less than 120 days above 10.84'NGVD29).
+&nbsp;
+
+<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/forecast_TreeIsland_HighWaterPM.png" width="600" height="360" />
+
+Figure 2. Distribution of future water levels predicted by EverForeCast simulations (colored lines), along with observed water levels (black line). Horizontal line shows the ecological target for tree island inundation (objective: less than 120 days above 10.84'NGVD29).
 
 
