@@ -12,7 +12,7 @@ Analytical tools supporting ecosystem based management in south Florida
 
 
 
-## EvergladesEBM installation
+## Installation
 
 ```
 install.packages("devtools")
@@ -20,7 +20,7 @@ devtools::install_github("troyhill/EvergladesEBM", ref = "main")
 ```
 
 
-## EvergladesEBM usage
+## Usage
 
 EvergladesEBM can be used for post-processing model output and making direct comparisons to ecological recommendations.
 
@@ -41,7 +41,7 @@ pastMonth <- plotEDENChange(EDEN_date = Sys.Date(),
 
 ```
 
-## Output: Regional ascension/recession rates
+## Regional ascension/recession rates
 
 &nbsp;
 
@@ -52,7 +52,7 @@ Figure 1. Recession rates (inches/week; left side) and categorizations based on 
 
 &nbsp;
 
-## Output: Position analysis using EverForecast output
+## Position analysis using EverForecast output
 
 &nbsp;
 
