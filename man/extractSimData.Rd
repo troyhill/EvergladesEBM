@@ -36,17 +36,19 @@ It returns a list with four objects (permutations of the same data):
 This function extracts data and aggregates EverForecast simulation data (contained in a list of netCDFs) for spatial locations of interest. The output is a list of four permutations of the same data. This function can take a very long time depending on the number of regions-of-interest and their size (e.g., 2 hours for ~50 Combined Operations Plan indicator regions).
 }
 \examples{
+### step 1: identify region(s) of interest
+locs   <- IRMap[[2]]
+loc    <- locs[locs$INDICATOR \%in\% 118:119, ]
+### step 2: homogenize projections (or let the function do this internally)
+# loc  <- spTransform(loc, crs(edenDEM))
 
-### load simulation data
-# fileNames  <- grep(list.files(dataFolder, full.names = TRUE), pattern = ".nc$", value = TRUE)
-# datList    <- lapply(X = fileNames, FUN = stack)
+### step 3: load EverForeCast data from netCDFs
+### available here: 
+### https://s3.amazonaws.com/jem.models.headless/Ever4Cast_2020_12/simulations_interpolated.zip
+# simDat  <- loadSims()
 
-### load points of interest
-# pts              <- read.delim("L:/Restoration Assessments/Non CERP Projects/COP/Position_ana
-#                                 lysis/data/data_drought_gage_table_20200109.txt")
-# coordinates(pts) <- c("UTM_east", "UTM_north")
-
-### extract data
-# extractSimData(simulationData = datList, targetLocations = pts, beginDate = startDate)
-
+# step 4: extract simulation data at each ROIs
+# EFDat <- extractSimData(simulationData      = simDat, 
+#                           targetLocations     = loc, 
+#                           targetLocationNames = loc$NAME)
 }
