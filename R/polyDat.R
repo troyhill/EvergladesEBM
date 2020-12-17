@@ -1,6 +1,6 @@
 #' @title Simulation data extracted for 51 south Florida indicator regions used in development of the Combined Operational Plan
 #'
-#' @description A list containing the output from running \link[RSM]{extractSimData} on an EVER4CAST simulation dataset beginning 20200101. The variables are as follows:
+#' @description A list containing the output from running \link[EvergladesEBM]{extractSimData} on an EverForeCast simulation dataset beginning 20201201. The variables are as follows:
 #'
 #' \itemize{
 #'   \item listOfSims      a list of simulation data for each indicator region. The list is composed of a dataframe for each simulation (n = 100); each dataframe has a column for each indicator region (n = 51) and a row for each day (n = 182). Values are mean water depth within the indicator region.
@@ -10,4 +10,27 @@
 #'   }
 #' @name polyDat 
 #' @format A list with four elements
+#' @examples 
+#' summary(polyDat)
+#' 
+#' \dontrun{
+#' ### code used to generate object 
+#' ### step 1: identify region(s) of interest
+#' locs   <- IRMap[[2]]
+#' loc    <- locs[locs$INDICATOR %in% 118:119, ]
+#' ### step 2: homogenize projections (or let the function do this internally)
+#' # loc  <- spTransform(loc, crs(edenDEM))
+#' 
+#' ### step 3: load EverForeCast data from netCDFs
+#' ### available here: 
+#' ### https://s3.amazonaws.com/jem.models.headless/Ever4Cast_2020_12/simulations_interpolated.zip
+#' simDat  <- loadSims()
+#' 
+#' # step 4: extract simulation data at each ROIs
+#' polyDat <- extractSimData(simulationData      = simDat, 
+#'                           targetLocations     = loc, 
+#'                           targetLocationNames = loc$NAME)
+#' # save("polyDat", file =  paste0(here::here(), "/data/polyDat.RData"))
+#' 
+#' }
 NULL

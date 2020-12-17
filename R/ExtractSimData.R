@@ -55,7 +55,7 @@ extractSimData <- function(simulationData,              # = datList,# *a list* o
   ### (3) a wide dataframe, and 
   ### (4) a long dataframe
   if (!raster::compareCRS(targetLocations, simulationData[[1]])) {
-    targetLocations <- sp::spTransform(targetLocations, sp::CRS(simulationData[[1]]))
+    targetLocations <- sp::spTransform(targetLocations, raster::crs(simulationData[[1]]))
     cat("Coordinate reference systems did not match. Conversion has been performed internally but may be incorrect (and result in NAs). \n")
   }
   
