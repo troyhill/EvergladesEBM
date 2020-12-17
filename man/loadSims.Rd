@@ -13,16 +13,16 @@ loadSims(directory = file.choose())
 A rasterStack object with units feet NGVD29
 }
 \description{
-Loads netCDF files and converts units from cm depth to feet NGVD29. highly recommended to set raster options as in the example section.
+Loads netCDF files and converts units from cm depth to feet NGVD29. highly recommended to set raster options as in the example section. Note: it is highly recommended that users change raster options to write temp files to disk rather than work in memory. See Examples section below.
 }
 \examples{
 loadSims
 \dontrun{
 ### recommended raster options to save to disk rather than work in 
-### memory
+### memory. My settings:
 rasterOptions(progress = "text", timer = TRUE, overwrite = TRUE, 
-todisk=TRUE, # critical to write temp files to disk rather than store in RAM
-tmpdir = "G:/data/raster/temp/delete", # critical to specify a temp folder
+todisk  = TRUE, # TRUE = write temp files to disk rather than store in RAM
+tmpdir  = "G:/data/raster/temp/delete", # Specify your temp folder
 tmptime = 4)
 
  }
