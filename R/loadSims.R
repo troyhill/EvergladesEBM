@@ -39,7 +39,7 @@ loadSims <- function(directory = file.choose()
   # altq_folder <- "G:/data/ever4cast/20201201/eden/simulations_interpolated"
   # load("C:/RDATA/EVER4cast/NGVD_to_NAVD.RData") # loads convertNGVD, a raster surface of elevations NAVD88 rel to NGVD29. Units = feet. to convert NAVD88 to NGVD29, add this. subtract from NGVD29 to get NAVD88.
   dem_eden   <- raster::raster(system.file("extdata/edenDEM.grd", package = "fireHydro")) # DEM used in eden data 9meters NAVD88)
-  dem_ngvd   <- (dem_eden * 3.2808) + convertNGVD # end units: feet NGVD29
+  dem_ngvd   <- (dem_eden * 3.2808) + EvergladesEBM::convertNGVD # end units: feet NGVD29
   newCRS     <- sp::proj4string(dem_ngvd)
   
   fileNames  <- grep(list.files(directory, full.names = TRUE), pattern = ".nc$", value = TRUE) # find .nc files in data folder

@@ -2,7 +2,7 @@ Package: EvergladesEBM
 Type: Package
 Title: Everglades Ecosystem-Based Management
 Version: 0.0.01
-Date: 2020-12-13
+Date: 2020-12-17
 Authors@R: c(
     person("Troy", "Hill", role = c("ctb", "cre"), email = "Hill.Troy@gmail.com", comment = c(ORCID = "0000-0003-2980-4099"))
     )
@@ -12,8 +12,7 @@ License: file LICENSE
 URL: https://github.com/troyhill/EvergladesEBM
 LazyData: true
 Remotes:
-    troyhill/fireHydro,
-    troyhill/RSM
+    troyhill/fireHydro
 Depends:
     R (>= 3.5.0),
     fireHydro,
