@@ -1,6 +1,5 @@
 # EvergladesEBM
 
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/troyhill/fireHydro?branch=master&svg=true)](https://ci.appveyor.com/project/troyhill/fireHydro) [![codecov.io](https://codecov.io/github/troyhill/fireHydro/coverage.svg?branch=master)](https://codecov.io/github/troyhill/fireHydro?branch=master)
 
 
 Analytical tools supporting ecosystem based management in south Florida
@@ -61,3 +60,9 @@ Figure 1. Recession rates (inches/week; left side) and categorizations based on 
 Figure 2. Distribution of future water levels predicted by EverForeCast simulations (colored lines), along with observed water levels (black line) at the three-gage average (inset map). Horizontal line shows the ecological target for tree island inundation (objective: less than 120 days above 10.84'NGVD29).
 
 
+
+
+
+
+
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/troyhill/evergladesebm?branch=main&svg=true)](https://ci.appveyor.com/project/troyhill/evergladesebm) [![codecov.io](https://codecov.io/github/troyhill/evergladesebm/coverage.svg?branch=main)](https://codecov.io/github/troyhill/evergladesebm?branch=main)
