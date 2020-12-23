@@ -2,8 +2,8 @@
 #'
 #' @description Calculates two-point ascension/recession rates from EDEN data. Produces a map, and two verisons of the raster output (one with rates of change, and one with rates categorized into poor/fair/good)
 #' 
-#' @param EDEN_date    Date (format = '\%Y-\%m-\%d') at end of recession rate calculation.
-#' @param changePeriod Time period (units = weeks) over which stage changes are measured. Default is two weeks.
+#' @param EDEN_date    Date (format = '\%Y-\%m-\%d') at end of recession rate calculation. Default behavior is to find the nearest Sunday.
+#' @param changePeriod Time period (units = weeks) over which stage changes are measured. Default is one week.
 #' @param poor Vector of paired values identifying 'poor' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first, e.g., c(0, Inf, -Inf, -1.8) 
 #' @param fair Vector of paired values identifying 'fair' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first
 #' @param good Vector of paired values identifying 'good' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first.
@@ -50,7 +50,7 @@
 
 
 
-plotEDENChange <- function(EDEN_date    = Sys.Date(), # format = '%Y-%m-%d'
+plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Date(),"%w")), # format = '%Y-%m-%d'
                          changePeriod = 1, # units = weeks
                          poor = c(c(0, Inf), c(-Inf, -0.18)), # inches/week
                          fair = c(c(-0.01, 0), c(-0.18, -0.05)),
