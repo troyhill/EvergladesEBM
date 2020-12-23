@@ -6,12 +6,16 @@
 \usage{
 plotEDENChange(
   EDEN_date = Sys.Date(),
-  changePeriod = 2,
-  poor = c(c(0, Inf), c(-Inf, -0.18 * 12)),
-  fair = c(c(-0.01 * 12, 0), c(-0.18 * 12, -0.05 * 12)),
-  good = c(-0.05 * 12, -0.01 * 12),
+  changePeriod = 1,
+  poor = c(c(0, Inf), c(-Inf, -0.18)),
+  fair = c(c(-0.01, 0), c(-0.18, -0.05)),
+  good = c(-0.05, -0.01),
+  other = NA,
+  otherName = "other",
+  otherColor = "darkred",
   plotOutput = NULL,
-  addToPlot = NA
+  addToPlot = NA,
+  maskPlot = FALSE
 )
 }
 \arguments{
@@ -19,15 +23,23 @@ plotEDENChange(
 
 \item{changePeriod}{Time period (units = weeks) over which stage changes are measured. Default is two weeks.}
 
-\item{poor}{Vector of paired values identifying 'poor' ascension/recession rates. Units must be inches/week. Pairs must have the lower value first, e.g., c(0, Inf, -Inf, -1.8)}
+\item{poor}{Vector of paired values identifying 'poor' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first, e.g., c(0, Inf, -Inf, -1.8)}
 
-\item{fair}{Vector of paired values identifying 'fair' ascension/recession rates. Units must be inches/week. Pairs must have the lower value first}
+\item{fair}{Vector of paired values identifying 'fair' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first}
 
-\item{good}{Vector of paired values identifying 'good' ascension/recession rates. Units must be inches/week. Pairs must have the lower value first.}
+\item{good}{Vector of paired values identifying 'good' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first.}
+
+\item{other}{Vector of paired values for an additional category (optional)}
+
+\item{otherName}{Legend entry for the additional category (optional)}
+
+\item{otherColor}{Color to be used for additional category (optional)}
 
 \item{plotOutput}{If the produced plot should be saved, use this argument to set the filename (include any extension, e.g. "plot.png").}
 
 \item{addToPlot}{If you'd like an SPDF added to the plot, pass it to this argument.}
+
+\item{maskPlot}{If set to TRUE, the spdf in addToPlot is used to mask and crop the data. This is useful if a small area (e.g., WCA3A) is of interest.}
 }
 \value{
 list \code{plotEDENChange} returns a list with the calculated rates (stageChange; units are inches/week), rates categorized into poor/fair/good (categories), a description of the time period used (description), and the criteria used to assign categories (criteria; units are inches/week)
@@ -37,8 +49,8 @@ Calculates two-point ascension/recession rates from EDEN data. Produces a map, a
 }
 \examples{
 \dontrun{
-### by default, the most recent two-week period in EDEN is used
-plotOut <- plotWLChange(addToPlot = sfwmd.shp)
+### by default, the most recent one-week period in EDEN is used
+plotOut <- plotEDENChange(addToPlot = sfwmd.shp)
 ylim.range <- max(abs(floor(cellStats(plotOut$stageChange, min))), 
 abs(ceiling(cellStats(plotOut$stageChange, max))))
 
