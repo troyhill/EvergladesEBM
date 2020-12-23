@@ -44,7 +44,7 @@ pastMonth <- plotEDENChange(EDEN_date = Sys.Date(),
 
 &nbsp;
 
-<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recession_EDEN_twoWeeks.png" width="375" height="450" /> <img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recessionRates.png" width="375" height="450" />
+<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recession_EDEN.png" width="375" height="450" /> <img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recessionRates.png" width="375" height="450" />
 
 Figure 1. Recession rates (inches/week; left side) and categorizations based on Everglades Ecosystem-Based Management recommendations (right).
 
