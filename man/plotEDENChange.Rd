@@ -42,7 +42,7 @@ plotEDENChange(
 \item{maskPlot}{If set to TRUE, the spdf in addToPlot is used to mask and crop the data. This is useful if a small area (e.g., WCA3A) is of interest.}
 }
 \value{
-list \code{plotEDENChange} returns a list with the calculated rates (stageChange; units are inches/week), rates categorized into poor/fair/good (categories), a description of the time period used (description), and the criteria used to assign categories (criteria; units are inches/week)
+list \code{plotEDENChange} returns a list with the calculated rates (stageChange; units are feet/week), rates categorized into poor/fair/good (categories), a description of the time period used (description), and the criteria used to assign categories (criteria; units are feet/week)
 }
 \description{
 Calculates two-point ascension/recession rates from EDEN data. Produces a map, and two verisons of the raster output (one with rates of change, and one with rates categorized into poor/fair/good)
@@ -54,7 +54,7 @@ plotOut <- plotEDENChange(addToPlot = sfwmd.shp)
 ylim.range <- max(abs(floor(cellStats(plotOut$stageChange, min))), 
 abs(ceiling(cellStats(plotOut$stageChange, max))))
 
-spplot(plotOut$stageChange, main = plotOut$description, # inches/week
+spplot(plotOut$stageChange, main = plotOut$description, # feet/week
 col.regions=colorRampPalette(c('red', 'white', 'blue'))(100),
 at = seq(-ylim.range, ylim.range, by = 0.5))  + 
 latticeExtra::layer(sp.polygons(sfwmd.shp, fill = NA))

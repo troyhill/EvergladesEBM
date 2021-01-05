@@ -14,7 +14,7 @@
 #' @param addToPlot If you'd like an SPDF added to the plot, pass it to this argument.
 #' @param maskPlot If set to TRUE, the spdf in addToPlot is used to mask and crop the data. This is useful if a small area (e.g., WCA3A) is of interest.
 #' 
-#' @return list \code{plotEDENChange} returns a list with the calculated rates (stageChange; units are inches/week), rates categorized into poor/fair/good (categories), a description of the time period used (description), and the criteria used to assign categories (criteria; units are inches/week) 
+#' @return list \code{plotEDENChange} returns a list with the calculated rates (stageChange; units are feet/week), rates categorized into poor/fair/good (categories), a description of the time period used (description), and the criteria used to assign categories (criteria; units are feet/week) 
 #' 
 #' 
 #' @examples
@@ -24,7 +24,7 @@
 #' ylim.range <- max(abs(floor(cellStats(plotOut$stageChange, min))), 
 #' abs(ceiling(cellStats(plotOut$stageChange, max))))
 #' 
-#' spplot(plotOut$stageChange, main = plotOut$description, # inches/week
+#' spplot(plotOut$stageChange, main = plotOut$description, # feet/week
 #' col.regions=colorRampPalette(c('red', 'white', 'blue'))(100),
 #' at = seq(-ylim.range, ylim.range, by = 0.5))  + 
 #' latticeExtra::layer(sp.polygons(sfwmd.shp, fill = NA))
@@ -40,6 +40,7 @@
 #' @importFrom raster plot
 #' @importFrom raster crop
 #' @importFrom raster crs
+#' @importFrom raster unique
 #' @importFrom graphics legend
 #' @importFrom sp spTransform
 #' @importFrom graphics par
@@ -52,7 +53,7 @@
 
 plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Date(),"%w")), # format = '%Y-%m-%d'
                          changePeriod = 1, # units = weeks
-                         poor = c(c(0, Inf), c(-Inf, -0.18)), # inches/week
+                         poor = c(c(0, Inf), c(-Inf, -0.18)), # feet/week
                          fair = c(c(-0.01, 0), c(-0.18, -0.05)),
                          good = c(-0.05, -0.01),
                          other = NA,     # values for an additional category
@@ -74,10 +75,10 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
   
   ### pull EDEN data
   EDEN_date1  <- gsub(x = EDEN_date, pattern = "-", replacement = "")
-  EDEN_date2 <- gsub(x = EDEN_date - changePeriod*7, pattern = "-", replacement = "")
+  eden1 <- fireHydro::getEDEN(EDEN_date = EDEN_date1,  returnType = "raster")
   
-  eden1 = fireHydro::getEDEN(EDEN_date = EDEN_date1,  returnType = "raster")
-  eden2 = fireHydro::getEDEN(EDEN_date = EDEN_date2,  returnType = "raster")
+  EDEN_date2 <- gsub(x = as.Date(eden1$date, format = "%Y%m%d") - changePeriod*7, pattern = "-", replacement = "")
+  eden2 <- fireHydro::getEDEN(EDEN_date = EDEN_date2,  returnType = "raster")
   
   ### get time period in weeks
   timePeriod <- as.numeric(as.Date(eden1$date, format = "%Y%m%d") - as.Date(eden2$date, format = "%Y%m%d")) / 7 
@@ -119,8 +120,8 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
   recRatesReclassed <- raster::reclassify(recRates, rclmat)
   
   ### remove any missing categories or plot will be messed up
-  colorNames    <- colorNames[unique(recRatesReclassed)]
-  categoryNames <- categoryNames[unique(recRatesReclassed)]
+  colorNames    <- colorNames[raster::unique(recRatesReclassed)]
+  categoryNames <- categoryNames[raster::unique(recRatesReclassed)]
   
   # plot reclassified data
   if (!is.null(plotOutput)) {

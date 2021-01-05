@@ -21,7 +21,7 @@ devtools::install_github("troyhill/EvergladesEBM", ref = "main")
 
 ## Usage
 
-EvergladesEBM can be used for post-processing model output and making direct comparisons to ecological recommendations.
+EvergladesEBM can be used for post-processing EverForecast model output and making direct comparisons to ecological recommendations.
 
 
 ```
@@ -54,6 +54,9 @@ Figure 1. Recession rates (inches/week; left side) and categorizations based on 
 ## Position analysis using EverForecast output
 
 &nbsp;
+
+EverForecast model simulations can be downloaded here: https://s3.amazonaws.com/jem.models.headless/index.html
+
 
 <img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/forecast_TreeIsland_HighWaterPM.png" width="600" height="360" />
 
