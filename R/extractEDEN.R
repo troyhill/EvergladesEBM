@@ -114,6 +114,7 @@ extractEDEN  <- function(targetLocations,
   #   }
   # }
   
+  dat$date <- as.Date(dat$date, format = "%Y%m%d")
   
   invisible(dat)
 }
