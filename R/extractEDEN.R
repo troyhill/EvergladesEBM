@@ -66,7 +66,7 @@ extractEDEN  <- function(targetLocations,
                                to = as.Date(test$date[length(test$date)], format = "%Y%m%d"), by = "day"), format = "%Y%m%d")
     
     # calculate mean for each polygon
-    r.vals <- raster::extract(test$data, targetLocations, df = TRUE, fun = mean)
+    r.vals <- raster::extract(x = test$data, y = targetLocations, df = TRUE, fun = mean)
     ###
     r.vals2         <- data.frame(t(r.vals))
     r.vals2         <- r.vals2[-1, ]
