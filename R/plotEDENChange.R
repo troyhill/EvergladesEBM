@@ -143,7 +143,7 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
   if (grepl(x = class(addToPlot), pattern = "SpatialPolygonsDataFrame|SpatialPointsDataFrame")) {
     addToPlot <- sp::spTransform(addToPlot, raster::crs(fireHydro::edenDEM))
     addToPlot <- raster::crop(x = addToPlot, y = recRatesReclassed)
-    raster::plot(addToPlot, add = TRUE)
+    raster::plot(addToPlot, add = TRUE, border = "gray")
   }
   if (!is.null(plotOutput)) {
     grDevices::dev.off()
