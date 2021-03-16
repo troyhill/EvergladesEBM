@@ -1,7 +1,7 @@
 ---
 title: EverForecast
 layout: template
-filename: EverForecast
+filename: qEverForecast
 --- 
 
 # Postprocessing EverForecast output
