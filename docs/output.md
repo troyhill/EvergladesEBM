@@ -9,7 +9,7 @@ filename: output
 
 ## Regional recession/ascension rates
 
-<img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recession_EDEN_ibis.png" width="375" height="450" /> <img src="https://github.com/troyhill/EvergladesEBM/blob/main/docs/figures/recessionRates.png" width="375" height="450" />
+<img src="{{site.url}}/figures/recession_EDEN_ibis.png" style="display: block; margin: auto;" width="375" height = "450" /> <img src="{{site.url}}/figures/recessionRates.png" style="display: block; margin: auto;" width="375" height = "450" />
 
 Figure 1. Recession rates (inches/week; left side) and categorizations based on Everglades Ecosystem-Based Management recommendations (right).
 
