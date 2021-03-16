@@ -1,7 +1,7 @@
 ---
 title: About
 layout: template
-filename: index
+filename: about
 --- 
 
 # EvergladesEBM
