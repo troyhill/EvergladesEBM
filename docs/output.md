@@ -13,20 +13,19 @@ filename: output
   <img src="{{site.url}}/figures/recession_EDEN_ibis.png" width="400" /><img src="{{site.url}}/figures/recession_EDEN.png" width="400" /> 
 </p>
 
-
 Figure 1. Recession rates (inches/week; right side) and categorizations based on Everglades Ecosystem-Based Management recommendations (left side).
 
 
 
 ## Water Conservation Areas
 
-<img src="{{site.url}}/figures/forecast_3AS3W1_DrySeasonHighWater.png" style="display: block; margin: auto;" width="600" height = "360" />
+<img src="{{site.url}}/figures/forecast_3AS3W1_DrySeasonHighWater.png" style="display: block; margin: auto;" width="800" />
 
 Figure 2. Dry season high water threshold at gauge 3AS3W1 (inset map). Distribution of future water levels predicted by EverForeCast simulations (colored lines), along with observed water levels (black line). Horizontal line shows the dry season high water line (objective: stage <9.2 ft NGVD29 from April 15 to May 31).
 
 
 
-<img src="{{site.url}}/figures/forecast_gage6364.png" style="display: block; margin: auto;" width="600" height = "360" />
+<img src="{{site.url}}/figures/forecast_gage6364.png" style="display: block; margin: auto;" width="1000" />
 
 Figure 3. Wood stork target. Mean of Site 63 and Site 64 daily stage, with objective of maintaining stage <9.73 feet NGVD29 between March 1 and May 31. 0.25 quantile: reaches 9.73 on 29 March
 
