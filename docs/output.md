@@ -9,14 +9,15 @@ filename: output
 
 ## Regional recession/ascension rates
 
-<img src="{{site.url}}/figures/recession_EDEN_ibis.png" width="750" height = "900" /><img src="{{site.url}}/figures/recession_EDEN.png" width="750" height = "900" />
+<p float="left">
+  <img src="{{site.url}}/figures/recession_EDEN_ibis.png" width="500" />
+  <img src="{{site.url}}/figures/recession_EDEN.png" width="500" /> 
+</p>
 
-Figure 1. Recession rates (inches/week; left side) and categorizations based on Everglades Ecosystem-Based Management recommendations (right).
 
 
-Categories             |  Absolute rates (ft/wk)
-:-------------------------:|:-------------------------:
-![]({{site.url}}/figures/recession_EDEN_ibis.png)  |  ![]({{site.url}}/figures/recession_EDEN.png)
+Figure 1. Recession rates (inches/week; right side) and categorizations based on Everglades Ecosystem-Based Management recommendations (left side).
+
 
 
 ## Water Conservation Areas
