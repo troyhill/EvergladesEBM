@@ -9,9 +9,9 @@ filename: output
 
 ## Regional recession/ascension rates
 
-<p float="left">
-  <img src="{{site.url}}/figures/recession_EDEN_ibis.png" width="500" />
-  <img src="{{site.url}}/figures/recession_EDEN.png" width="500" /> 
+<p align="middle">
+  <img src="{{site.url}}/figures/recession_EDEN_ibis.png" width="450" />
+  <img src="{{site.url}}/figures/recession_EDEN.png" width="450" /> 
 </p>
 
 
