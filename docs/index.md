@@ -4,13 +4,22 @@ layout: template
 filename: index
 --- 
 
-# EvergladesEBM
-index listing
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/troyhill/evergladesebm?branch=main&svg=true)](https://ci.appveyor.com/project/troyhill/evergladesebm) 
+
 
 #### What is EvergladesEBM?
+`EvergladesEBM` is an R package with analytical tools supporting ecosystem based management in south Florida.
 
 
 #### How can I use EvergladesEBM?
+`EvergladesEBM` can be used for working with EDEN data and post-processing EverForecast simulation output and making direct comparisons to ecological recommendations.
+
+The package can be installed from R using the `devtools`:
+
+```
+install.packages("devtools")
+devtools::install_github("troyhill/EvergladesEBM", ref = "main")
+```
 
 
 #### License

@@ -8,8 +8,7 @@ filename: qEverForecast
 
 ### Download simulation data
 
-(https://s3.amazonaws.com/jem.models.headless/index.html)[EverForecast simulation output] 
-
+<a href="https://s3.amazonaws.com/jem.models.headless/index.html">EverForecast simulation output</a>
 
 ### Background
 
