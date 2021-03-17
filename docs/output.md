@@ -14,7 +14,6 @@ filename: output
 </p>
 
 
-
 Figure 1. Recession rates (inches/week; right side) and categorizations based on Everglades Ecosystem-Based Management recommendations (left side).
 
 
