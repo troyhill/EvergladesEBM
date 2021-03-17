@@ -14,6 +14,9 @@ filename: output
 Figure 1. Recession rates (inches/week; left side) and categorizations based on Everglades Ecosystem-Based Management recommendations (right).
 
 
+Categories             |  Absolute rates (ft/wk)
+:-------------------------:|:-------------------------:
+![]({{site.url}}/figures/recession_EDEN_ibis.png)  |  ![]({{site.url}}/figures/recession_EDEN.png)
 
 
 ## Water Conservation Areas
