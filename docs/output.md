@@ -46,6 +46,6 @@ Figure 5. Observed and forecast water levels at NP-205. Note different quantiles
 
 <img src="{{site.url}}/figures/BISC_inflows.png" style="display: block; margin: auto;" width="800" />
 
-Figure 6. Recent structure flow into Biscayne National Park (and S-22, just north of BISC).
+Figure 6. Recent structure flow into Biscayne National Park (and S-22, just north of Biscayne National Park). Overlaid black lines indicate the 25th, 50th, and 75th percentiles for daily flows since 2010.
 
 
