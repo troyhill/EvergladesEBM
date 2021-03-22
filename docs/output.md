@@ -34,7 +34,7 @@ Figure 4. Observed and forecast water levels at the three gauge average in WCA3A
 
 
 
-### Everglades and Big Cypress
+## Everglades and Big Cypress
 
 <img src="{{site.url}}/figures/forecast_np205_smoothed_adj.png" style="display: block; margin: auto;" width="800" />
 
@@ -42,7 +42,10 @@ Figure 5. Observed and forecast water levels at NP-205. Note different quantiles
 
 
 
-### Biscayne National Park
+## Biscayne National Park
 
-TBD.
+<img src="{{site.url}}/figures/BISC_inflows.png" style="display: block; margin: auto;" width="800" />
+
+Figure 6. Recent structure flow into Biscayne National Park (and S-22, just north of BISC).
+
 
