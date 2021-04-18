@@ -77,7 +77,7 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
   EDEN_date1  <- gsub(x = EDEN_date, pattern = "-", replacement = "")
   eden1 <- fireHydro::getEDEN(EDEN_date = EDEN_date1,  returnType = "raster")
   
-  EDEN_date2 <- gsub(x = as.Date(eden1$date, format = "%Y%m%d") - changePeriod*7, pattern = "-", replacement = "")
+  EDEN_date2 <- gsub(x = as.Date(eden1$date, format = "%Y%m%d") - (changePeriod*7 - 1), pattern = "-", replacement = "")
   eden2 <- fireHydro::getEDEN(EDEN_date = EDEN_date2,  returnType = "raster")
   
   ### get time period in weeks
