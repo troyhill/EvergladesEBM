@@ -66,7 +66,14 @@ extractEDEN  <- function(targetLocations,
                                to = as.Date(test$date[length(test$date)], format = "%Y%m%d"), by = "day"), format = "%Y%m%d")
     
     # calculate mean for each polygon
-    r.vals <- raster::extract(x = test$data, y = targetLocations, df = TRUE, fun = mean, na.rm = TRUE)
+    # warning appears with NAs and stops function: "In .getRat(x, ratvalues, ratnames, rattypes) : NAs introduced by coercion"
+    withCallingHandlers({
+      r.vals <- raster::extract(x = test$data, y = targetLocations, df = TRUE, fun = mean, na.rm = TRUE)
+    }, warning=function(w) {
+      if (startsWith(conditionMessage(w), "NAs introduced by coercion"))
+        invokeRestart("muffleWarning")
+    })
+    
     ###
     r.vals2         <- data.frame(t(r.vals))
     r.vals2         <- r.vals2[-1, ]
