@@ -2,14 +2,14 @@
 % Please edit documentation in R/plotPM.R
 \name{plotPM}
 \alias{plotPM}
-\title{Convert feet to centimeters}
+\title{Plot extracted EverForecast and EDEN data}
 \usage{
 plotPM(quantileData, EDENdata, daysToPlot = 60)
 }
 \arguments{
-\item{quantileData}{EverForecast quantile dataframe, as returned by getQuantiles()}
+\item{quantileData}{EverForecast quantile dataframe, as returned by `getQuantiles()`}
 
-\item{EDENdata}{EDEN quantile dataframe, as returned by getQuantiles()}
+\item{EDENdata}{EDEN quantile dataframe, as returned by `getQuantiles()`}
 
 \item{daysToPlot}{days of EDEN data to plot prior to EverForecast model run date}
 }
@@ -17,5 +17,5 @@ plotPM(quantileData, EDENdata, daysToPlot = 60)
 A ggplot object
 }
 \description{
-Converts feet to centimeters
+A ggplot wrapper for easily plotting extracted EDEN data and EverForecast output aggregated by `getQuantiles`
 }

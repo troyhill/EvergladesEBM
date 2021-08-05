@@ -1,9 +1,9 @@
-#' @title Convert feet to centimeters
+#' @title Plot extracted EverForecast and EDEN data
 #'
-#' @description Converts feet to centimeters
+#' @description A ggplot wrapper for easily plotting extracted EDEN data and EverForecast output aggregated by `getQuantiles` 
 #' 
-#' @param quantileData    EverForecast quantile dataframe, as returned by getQuantiles()
-#' @param EDENdata    EDEN quantile dataframe, as returned by getQuantiles()
+#' @param quantileData    EverForecast quantile dataframe, as returned by `getQuantiles()`
+#' @param EDENdata    EDEN quantile dataframe, as returned by `getQuantiles()`
 #' @param daysToPlot    days of EDEN data to plot prior to EverForecast model run date
 #' 
 #' @return A ggplot object
