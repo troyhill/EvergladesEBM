@@ -10,7 +10,7 @@ feetToCm(ft)
 \item{ft}{input value with units of feet.}
 }
 \value{
-A single value with units of centimeters
+A numeric value with units of centimeters
 }
 \description{
 Converts feet to centimeters

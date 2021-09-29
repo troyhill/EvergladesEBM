@@ -4,7 +4,7 @@
 #' 
 #' @param ft    input value with units of feet.
 #' 
-#' @return A single value with units of centimeters
+#' @return A numeric value with units of centimeters
 #' 
 #' 
 #' @examples
@@ -17,5 +17,5 @@
 
 feetToCm     <- function(ft) {
   cmVal <- ft * 30.48
-  invisible(cmVal)
+  return(cmVal)
 }
