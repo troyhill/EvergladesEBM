@@ -4,12 +4,14 @@
 \alias{hydroperiod}
 \title{Quantifies hydroperiod (continuous or discontinuous)}
 \usage{
-hydroperiod(x, threshold = 0, continuous = TRUE)
+hydroperiod(x, threshold = 0, continuous = TRUE, percent = FALSE)
 }
 \arguments{
 \item{threshold}{threshold value for determining inundation. Note: values equal to or greater than the threshold count as inundated.}
 
 \item{continuous}{if TRUE, the quantity calculated is continuous hydroperiod (largest run of consecutive days inundated). If `FALSE`, the function returns discontinuous hydroperiod (total days inundated in record)}
+
+\item{percent}{if TRUE, returned value is expressed as a fraction of all non-NA observations. This may not be meaningful in all cases (e.g., continuous hydroperiod)}
 
 \item{data}{input dataset (e.g., one year of stage data for a point/pixel)}
 }
