@@ -14,8 +14,7 @@ Analytical tools supporting ecosystem based management in south Florida
 ## Installation
 
 ```
-install.packages("devtools")
-devtools::install_github("troyhill/EvergladesEBM", ref = "main")
+remotes::install_github("troyhill/EvergladesEBM", ref = "main")
 ```
 
 
