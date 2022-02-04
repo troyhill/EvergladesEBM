@@ -135,7 +135,7 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
   area.cats$desc  <- rev(c(">210 days", "90-210 days", "0-89 days"))
   area.cats$color <- categoryColors
   # paste0(round(area.cats$Freq*100, 1), "%")
-  subpopA.area    <- sum(!is.na(raster::values(subA_cats))) * 400*400 / 4047 / 1e3 # kacres
+  subpopA.area    <- sum(!is.na(raster::values(subA_cats))) * 400*400 * 0.000247105 / 1e3 # kacres
   area.cats$kac   <- area.cats$Freq * subpopA.area # kacres in each category
   area.cats$label <- paste0(area.cats$desc, ": ", paste0(round(area.cats$Freq*100, 1), "%; ", round(area.cats$kac, 1), " kac"))
   
