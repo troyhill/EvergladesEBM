@@ -36,6 +36,7 @@
 #' @importFrom raster subset
 #' @importFrom raster crs
 #' @importFrom raster unique
+#' @importFrom raster scalebar
 #' @importFrom graphics legend
 #' @importFrom sp spTransform
 #' @importFrom graphics par
@@ -152,7 +153,7 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
   raster::plot(areaOfInterest, add = TRUE)
   ### add scale bar
   barLength <- (extent(subA_cats)[2] - extent(subA_cats)[1])/10
-  scalebar(barLength, label = paste0(round(barLength/1e3), " km"))
+  raster::scalebar(barLength, label = paste0(round(barLength/1e3), " km"))
   
   graphics::mtext(text = title_text, side = 3, cex = 1.3)
   graphics::legend("topleft",
