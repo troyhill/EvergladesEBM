@@ -81,7 +81,7 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
   m      <- c(-9999, elevation_offset, 0,  
               elevation_offset, 9999, 1)
   rclmat <- matrix(m, ncol=3, byrow=TRUE)
-  tst    <- raster::reclassify(subA, rclmat)
+  tst    <- raster::reclassify(subA, rclmat, include.lowest = FALSE) # values equal to the lowest value in rcl are excluded from the row 
   tst2 <- raster::overlay(raster::subset(x = tst, subset = which((dateRange >= dateMin) & (dateRange < dateMax))), fun= sum, recycle=FALSE)
   
   
