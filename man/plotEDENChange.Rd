@@ -6,7 +6,7 @@
 \usage{
 plotEDENChange(
   EDEN_date = Sys.Date() - as.numeric(format(Sys.Date(), "\%w")),
-  changePeriod = 1,
+  changePeriod = 7,
   poor = c(c(0, Inf), c(-Inf, -0.18)),
   fair = c(c(-0.01, 0), c(-0.18, -0.05)),
   good = c(-0.05, -0.01),
@@ -21,7 +21,7 @@ plotEDENChange(
 \arguments{
 \item{EDEN_date}{Date (format = '\%Y-\%m-\%d') at end of recession rate calculation. Default behavior is to find the nearest Sunday.}
 
-\item{changePeriod}{Time period (units = weeks) over which stage changes are measured. Default is one week.}
+\item{changePeriod}{Time period (units = days) over which stage changes are measured. Default is seven days (e.g., Sunday-Sunday).}
 
 \item{poor}{Vector of paired values identifying 'poor' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first, e.g., c(0, Inf, -Inf, -1.8)}
 

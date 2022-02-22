@@ -62,9 +62,10 @@ extractEDEN  <- function(targetLocations,
     }
     
     ### pull dates
-    dateRange <- format(seq.Date(from = as.Date(test$date[1], format = "%Y%m%d"),
-                               to = as.Date(test$date[length(test$date)], format = "%Y%m%d"), by = "day"), format = "%Y%m%d")
-    
+    dateRange <- format(seq.Date(from = as.Date(min(test$date, na.rm = TRUE), format = "%Y%m%d"),
+                               to = as.Date(max(test$date, na.rm = TRUE), format = "%Y%m%d"), by = "day"), format = "%Y%m%d")
+    test$data <- subset(test$data, match(dateRange, format(x = test$date, format = "%Y%m%d")))
+    test$date <- test$date[match(dateRange, format(x = test$date, format = "%Y%m%d"))]
     # calculate mean for each polygon
     # warning appears with NAs and stops function: "In .getRat(x, ratvalues, ratnames, rattypes) : NAs introduced by coercion"
     withCallingHandlers({
