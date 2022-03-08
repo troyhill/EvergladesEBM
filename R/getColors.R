@@ -39,8 +39,8 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   
   Thresh <- threshold
   nHalf  <- length(uniqueValues)/2
-  valsAboveThreshold <- length(uniqueValues[uniqueValues >= Thresh])
-  valsBelowThreshold <- length(uniqueValues[uniqueValues <= Thresh])
+  valsAboveThreshold <- length(uniqueValues[uniqueValues > Thresh])
+  valsBelowThreshold <- length(uniqueValues[uniqueValues < Thresh])
   Min <- min(uniqueValues, na.rm = TRUE)
   Max <- max(uniqueValues, na.rm = TRUE)
   
