@@ -6,7 +6,6 @@
 #' @name treePts
 #' @format a SpatVector
 #' @examples 
-#' summary(treePts)
 #' 
 #' \dontrun{
 #' ### code used to generate object 
@@ -14,10 +13,9 @@
 #' stringsAsFactors = FALSE)
 #' ### point/polygon of interest (with latitude and longitude coordinates)
 #' names(treePts) <- tolower(names(treePts))
-#' sp::coordinates(treePts) <- c("longitude", "latitude")
-#' sp::proj4string(treePts) <- sp::CRS("+init=epsg:4326")
+#' coordinates(treePts) <- c("longitude", "latitude")
+#' proj4string(treePts) <- CRS("+init=epsg:4326")
 #' treePts$stn    <- treePts$ti_id
-#' treePts <- terra::vect(treePts)
 #' # save("treePts", file =  paste0(here::here(), "/data/treePts.RData"))
 #' 
 #' }

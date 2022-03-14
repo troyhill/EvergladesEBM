@@ -10,9 +10,9 @@
 #' 
 #' \dontrun{
 #' ### code used to generate object 
-#' fb <- terra::vect("C:/ESRIDATA/Florida_Bay/subregions", "SFL_NNC") 
+#' fb <- rgdal::readOGR("C:/ESRIDATA/Florida_Bay/subregions", "SFL_NNC") 
 #' fb <- fb[grepl(x = fb$SEGMENT_NA, pattern = "Florida Bay|Manatee Bay"), ]
-#' fb <- terra::project(fb, terra::crs(terra::rast(fireHydro::edenDEM), proj = TRUE))
+#' fb <- sp::spTransform(fb, sp::proj4string(fireHydro::edenDEM))
 #' # save("fb", file =  paste0(here::here(), "/data/fb.RData"))
 #' 
 #' }
