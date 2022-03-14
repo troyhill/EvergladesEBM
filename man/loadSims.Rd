@@ -10,20 +10,23 @@ loadSims(directory = file.choose())
 \item{directory}{the address of an individual file in a folder of EverForecast .nc files. The default action is <code>file.choose()</code>; a browser menu appears so the user can select the the desired directory by identifying a single .nc file in the folder of netCDFs.}
 }
 \value{
-A rasterStack object with units feet NGVD29
+A SpatRaster object with units feet NGVD29
 }
 \description{
-Loads netCDF files and converts units from cm depth to feet NGVD29. highly recommended to set raster options as in the example section. Note: it is highly recommended that users change raster options to write temp files to disk rather than work in memory. See Examples section below.
+Loads netCDF files and converts units from cm depth to feet NGVD29. highly recommended to set raster options as in the example section. Note: it is highly recommended that users change terra options to write temp files to disk rather than work in memory. See Examples section below.
 }
 \examples{
-loadSims
+
 \dontrun{
 ### recommended raster options to save to disk rather than work in 
 ### memory. My settings:
-rasterOptions(progress = "text", timer = TRUE, overwrite = TRUE, 
-todisk  = TRUE, # TRUE = write temp files to disk rather than store in RAM
-tmpdir  = "G:/data/raster/temp/delete", # Specify your temp folder
-tmptime = 4)
+# terraOptions(memfrac=0.7, memmax = 2,
+#   tmpdir = "G:/data/raster/temp/delete", 
+#   todisk = TRUE,
+#   progress = 1)
+
+# select a .nc in the folder you want to load
+# efcDat <- loadSims(directory = file.choose()) 
 
  }
  

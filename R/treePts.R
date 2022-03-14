@@ -1,10 +1,10 @@
 #' 
 #' @title Tree island locations and elevations
 #' 
-#' @description A SpatialPointsDataFrame with tree island elevations. Data provided by SFWMD. epsg:4326 (equivlane to proj4string :[+proj=utm +zone=17 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs). Elevations are in a variety of units (ft, cm, m) and datums (NGVD29, NAVD88). An hclust.cluster column includes hierarchical cluster groups identified by Jed Redwine.
+#' @description A SpatVector with tree island elevations. Data provided by SFWMD. epsg:4326 (equivlane to proj4string :+proj=utm +zone=17 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs). Elevations are in a variety of units (ft, cm, m) and datums (NGVD29, NAVD88). An hclust.cluster column includes hierarchical cluster groups identified by Jed Redwine.
 #'
 #' @name treePts
-#' @format a SpatialPolygonsDataFrame
+#' @format a SpatVector
 #' @examples 
 #' summary(treePts)
 #' 
@@ -14,9 +14,10 @@
 #' stringsAsFactors = FALSE)
 #' ### point/polygon of interest (with latitude and longitude coordinates)
 #' names(treePts) <- tolower(names(treePts))
-#' coordinates(treePts) <- c("longitude", "latitude")
-#' proj4string(treePts) <- CRS("+init=epsg:4326")
+#' sp::coordinates(treePts) <- c("longitude", "latitude")
+#' sp::proj4string(treePts) <- sp::CRS("+init=epsg:4326")
 #' treePts$stn    <- treePts$ti_id
+#' treePts <- terra::vect(treePts)
 #' # save("treePts", file =  paste0(here::here(), "/data/treePts.RData"))
 #' 
 #' }
