@@ -67,7 +67,7 @@ extractEDEN  <- function(targetLocations,
     stop("EDEN data must be in terra (SpatRaster) or raster format. Pro-tip: use `returnType = 'raster'` argument in fireHydro::getEDEN()")
   }
     ### check/transform CRS
-    if (!identical(terra::crs(targetLocations), terra::crs(test$data))) {
+    if (!identical(terra::crs(targetLocations, proj = TRUE), terra::crs(test$data, proj = TRUE))) {
       targetLocations <- terra::project(targetLocations, terra::crs(test$data, proj = TRUE))
       terra::plot(test$data[[1]], axes = FALSE, legend = FALSE, main = 'reprojected targetLocations')
       terra::plot(targetLocations, add = TRUE)

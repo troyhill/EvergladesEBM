@@ -37,12 +37,12 @@ Calculates discontinuous hydroperiod for cells within a polygon and creates figu
 ### CSSS population shapefiles are available in RSM package
 ### EDEN API available from fireHydro package
 
-csss    <- readOGR(system.file("extdata/gis/misc", package = "RSM"), layer = "CSSS")
+csss    <- vect(system.file("extdata/gis/misc", package = "RSM"), layer = "CSSS")
 subpopA <- csss[6, ]
 eden_input <- fireHydro::getAnnualEDEN(2021)
 plotFileName  <- "subA_discontinuous_calendar_2021.png"
 
-plotCSSS_daysDry(areaOfInterest = subpopA, 
+plotCSSS(areaOfInterest = subpopA, 
    EDEN_data = eden_input, 
    plotTitle = plotFileName)
 

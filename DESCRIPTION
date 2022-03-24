@@ -18,7 +18,6 @@ Depends:
     R (>= 3.5.0),
     fireHydro,
     terra,
-    sp,
     raster,
     plyr,
     ggplot2

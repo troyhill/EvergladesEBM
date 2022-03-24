@@ -37,15 +37,15 @@ plotEDENChange(
 
 \item{plotOutput}{If the produced plot should be saved, use this argument to set the filename (include any extension, e.g. "plot.png").}
 
-\item{addToPlot}{If you'd like an SPDF added to the plot, pass it to this argument.}
+\item{addToPlot}{If you'd like an SpatVector added to the plot, pass it to this argument.}
 
-\item{maskPlot}{If set to TRUE, the spdf in addToPlot is used to mask and crop the data. This is useful if a small area (e.g., WCA3A) is of interest.}
+\item{maskPlot}{If set to TRUE, the SpatVector in addToPlot is used to mask and crop the data. This is useful if a small area (e.g., WCA3A) is of interest.}
 }
 \value{
 list \code{plotEDENChange} returns a list with the calculated rates (stageChange; units are feet/week), rates categorized into poor/fair/good (categories), a description of the time period used (description), and the criteria used to assign categories (criteria; units are feet/week)
 }
 \description{
-Calculates two-point ascension/recession rates from EDEN data. Produces a map, and two verisons of the raster output (one with rates of change, and one with rates categorized into poor/fair/good)
+Calculates two-point ascension/recession rates from EDEN data. Produces a map, and two versions of the SpatRaster output (one with rates of change, and one with rates categorized into poor/fair/good)
 }
 \examples{
 \dontrun{

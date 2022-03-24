@@ -70,14 +70,14 @@ extractSimData <- function(simulationData,              # = datList,# *a list* o
     stop("simulationData input must be in terra (SpatRaster) or raster format. Pro-tip: use `returnType = 'raster'` argument in fireHydro::getEDEN()")
   }
   ### check/transform CRS
-  if (!identical(terra::crs(targetLocations), terra::crs(simulationData[[1]]))) {
+  if (!identical(terra::crs(targetLocations, proj = TRUE), terra::crs(simulationData[[1]], proj = TRUE))) {
     targetLocations <- terra::project(targetLocations, terra::crs(simulationData[[1]], proj = TRUE))
     cat("Coordinate reference systems did not match. Conversion has been performed internally but may be incorrect (and result in NAs). \n")
   }
   
   
   
-  if (!identical(terra::crs(targetLocations), terra::crs(simulationData[[1]]))) {
+  if (!identical(terra::crs(targetLocations, proj = TRUE), terra::crs(simulationData[[1]], proj = TRUE))) {
     targetLocations <- terra::project(targetLocations, terra::crs(simulationData[[1]], proj = TRUE))
     cat("Coordinate reference systems did not match. Conversion has been performed internally but may be incorrect (and result in NAs). \n")
   }

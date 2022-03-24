@@ -17,12 +17,12 @@
 #' ### CSSS population shapefiles are available in RSM package
 #' ### EDEN API available from fireHydro package
 #' 
-#' csss    <- readOGR(system.file("extdata/gis/misc", package = "RSM"), layer = "CSSS")
+#' csss    <- vect(system.file("extdata/gis/misc", package = "RSM"), layer = "CSSS")
 #' subpopA <- csss[6, ]
 #' eden_input <- fireHydro::getAnnualEDEN(2021)
 #' plotFileName  <- "subA_discontinuous_calendar_2021.png"
 #' 
-#' plotCSSS_daysDry(areaOfInterest = subpopA, 
+#' plotCSSS(areaOfInterest = subpopA, 
 #'    EDEN_data = eden_input, 
 #'    plotTitle = plotFileName)
 #' 
@@ -30,15 +30,19 @@
 #' }
 #' 
 #' 
-#' @importFrom raster reclassify
-#' @importFrom raster plot
-#' @importFrom raster crop
-#' @importFrom raster subset
-#' @importFrom raster crs
-#' @importFrom raster unique
-#' @importFrom raster scalebar
+#' @importFrom terra classify
+#' @importFrom terra plot
+#' @importFrom terra crop
+#' @importFrom terra mask
+#' @importFrom terra values
+#' @importFrom terra subset
+#' @importFrom terra crs
+#' @importFrom terra unique
+#' @importFrom terra sbar
 #' @importFrom graphics legend
-#' @importFrom sp spTransform
+#' @importFrom terra project
+#' @importFrom terra rast
+#' @importFrom terra vect
 #' @importFrom graphics par
 #' @importFrom grDevices png
 #' @importFrom grDevices dev.off
@@ -56,17 +60,22 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
 )
 {
   ### input checks
-  if (!grepl(x = class(areaOfInterest), pattern = "SpatialPolygonsDataFrame|SpatialPointsDataFrame")) {
-    stop("'areaOfInterest' input must be a spatialPolygonDataFrame")
+  if (!grepl(x = tolower(class(areaOfInterest)), pattern = "spatvector")) {
+    areaOfInterest <- terra::vect(areaOfInterest)
+    # stop("'areaOfInterest' input must be a spatialPolygonDataFrame")
   }
   if (!grepl(x = class(EDEN_data), pattern = "eden")) {
     message("'EDEN_data' input must be of class 'eden'; use EDEN API in fireHydro. See fireHydro::getAnnualEDEN()")
   }
-  
+  if (!grepl(x = tolower(class(EDEN_data$data)), pattern = "spatraster")){
+     EDEN_data$data <- terra::rast(EDEN_data$data*1)
+  }
   ### transform CRS
-  areaOfInterest <- sp::spTransform(areaOfInterest, raster::crs(EDEN_data$data))
+  # areaOfInterest <- sp::spTransform(areaOfInterest, raster::crs(EDEN_data$data))
+  # subA <- raster::crop(x = mask(x = EDEN_data$data, mask = areaOfInterest), y = areaOfInterest)
+  areaOfInterest <- terra::project(areaOfInterest, terra::crs(EDEN_data$data, proj = TRUE))
+  subA           <- terra::crop(x = terra::mask(x = EDEN_data$data, mask = areaOfInterest), y = areaOfInterest)
   
-  subA <- raster::crop(x = mask(x = EDEN_data$data, mask = areaOfInterest), y = areaOfInterest)
   
   ### including this in case filtering is desired in future
   dateMin <- EDEN_data$date[1]
@@ -81,8 +90,9 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
   m      <- c(-9999, elevation_offset, 0,  
               elevation_offset, 9999, 1)
   rclmat <- matrix(m, ncol=3, byrow=TRUE)
-  tst    <- raster::reclassify(subA, rclmat, include.lowest = FALSE) # values equal to the lowest value in rcl are excluded from the row 
-  tst2 <- raster::overlay(raster::subset(x = tst, subset = which((dateRange >= dateMin) & (dateRange < dateMax))), fun= sum, recycle=FALSE)
+  tst    <- terra::classify(subA, rclmat, include.lowest = FALSE) # values equal to the lowest value in rcl are excluded from the row 
+  # https://rspatial.org/terra/pkg/4-algebra.html
+  tst2   <- sum(terra::subset(x = tst, subset = which((dateRange >= dateMin) & (dateRange < dateMax))))
   
   
   if (is.null(plotTitle)) { 
@@ -95,7 +105,7 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
   ### plot with continuous scale
   # png("subpopA_daysDry.png", width = 5, height = 5, units = "in", res = 150)
   par(mar = c(0.5, 1, 2, 1))
-  plot(areaOfInterest)
+  plot(areaOfInterest, axes=FALSE)
   plot(tst2, axes=FALSE, box=FALSE, add = TRUE)
   # plot(tst2, axes=FALSE, box=FALSE, breaks=cuts, col = pal(length(dateSelect)), add = TRUE)
   plot(areaOfInterest, add = TRUE)
@@ -110,7 +120,7 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
   ### area in each category:
   ### discontinuous hydroperiods during the calendar year of 0 to 89, 
   ### 90 to 210, and > 210 days
-  subA.vals <- raster::values(tst2)[!is.na(raster::values(tst2))] # discontinuous hydroperiod
+  subA.vals <- terra::values(tst2, na.rm = TRUE)[, 1] # discontinuous hydroperiod
   
   ### reclassify to get area in each category
   m      <- #c(-9999, #0, 0,
@@ -119,11 +129,11 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
               90, 210, 1,
               210, 9999, 2)
   rclmat       <- matrix(m, ncol=3, byrow=TRUE)
-  subA_cats    <- raster::reclassify(tst2, rclmat)
+  subA_cats    <- terra::classify(tst2, rclmat)
   # cuts <- c(0:3) #set breaks. 120 days in time period
   
   ### table: area in each category
-  area.cats      <- data.frame(table(raster::values(subA_cats)) / sum(!is.na(raster::values(subA_cats))))
+  area.cats      <- data.frame(table(terra::values(subA_cats, na.rm = TRUE)[, 1]) / length(terra::values(subA_cats, na.rm = TRUE)[, 1]))
   area.cats$Var1 <- as.numeric(as.character(area.cats$Var1))
   if (nrow(area.cats) < nrow(rclmat)) { # if there's a missing category, add it
     missingVals <- c(0:(nrow(rclmat)-1))[-which(0:(nrow(rclmat)-1) %in% as.numeric(as.character(area.cats$Var1)))]
@@ -135,7 +145,7 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
   area.cats$desc  <- rev(c(">210 days", "90-210 days", "0-89 days"))
   area.cats$color <- categoryColors
   # paste0(round(area.cats$Freq*100, 1), "%")
-  subpopA.area    <- sum(!is.na(raster::values(subA_cats))) * 400*400 * 0.000247105 / 1e3 # kacres
+  subpopA.area    <- length(terra::values(subA_cats, na.rm = TRUE)[, 1]) * 400*400 * 0.000247105 / 1e3 # kacres
   area.cats$kac   <- area.cats$Freq * subpopA.area # kacres in each category
   area.cats$label <- paste0(area.cats$desc, ": ", paste0(round(area.cats$Freq*100, 1), "%; ", round(area.cats$kac, 1), " kac"))
   
@@ -147,13 +157,13 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
     grDevices::png(plotOutput, width = 5, height = 6, units = "in", res = 250)
     graphics::par(mar = c(1, 1, 2, 1))
   }
-  raster::plot(areaOfInterest)
-  raster::plot(subA_cats, add = TRUE, axes=FALSE, box=FALSE, legend = FALSE, #breaks=cuts, 
-       col = area.cats$color[sort(unique(na.omit(raster::values(subA_cats))) + 1)]) # pal(4))
-  raster::plot(areaOfInterest, add = TRUE)
+  terra::plot(areaOfInterest, axes = FALSE)
+  terra::plot(subA_cats, add = TRUE, axes=FALSE, box=FALSE, legend = FALSE, #breaks=cuts, 
+       col = area.cats$color[sort(unique(terra::values(subA_cats, na.rm = TRUE)[, 1]) + 1)]) # pal(4))
+  terra::plot(areaOfInterest, add = TRUE)
   ### add scale bar
   barLength <- (extent(subA_cats)[2] - extent(subA_cats)[1])/10
-  raster::scalebar(barLength, label = paste0(round(barLength/1e3), " km"))
+  terra::sbar(barLength, label = paste0(round(barLength/1e3), " km"))
   
   graphics::mtext(text = title_text, side = 3, cex = 1.3)
   graphics::legend("topleft",

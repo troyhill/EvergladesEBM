@@ -1,6 +1,6 @@
 #' @title Calculate ascension/recession rates over some time period
 #'
-#' @description Calculates two-point ascension/recession rates from EDEN data. Produces a map, and two verisons of the raster output (one with rates of change, and one with rates categorized into poor/fair/good)
+#' @description Calculates two-point ascension/recession rates from EDEN data. Produces a map, and two versions of the SpatRaster output (one with rates of change, and one with rates categorized into poor/fair/good)
 #' 
 #' @param EDEN_date    Date (format = '\%Y-\%m-\%d') at end of recession rate calculation. Default behavior is to find the nearest Sunday.
 #' @param changePeriod Time period (units = days) over which stage changes are measured. Default is seven days (e.g., Sunday-Sunday).
@@ -11,8 +11,8 @@
 #' @param otherName Legend entry for the additional category (optional)
 #' @param otherColor Color to be used for additional category (optional)
 #' @param plotOutput If the produced plot should be saved, use this argument to set the filename (include any extension, e.g. "plot.png").
-#' @param addToPlot If you'd like an SPDF added to the plot, pass it to this argument.
-#' @param maskPlot If set to TRUE, the spdf in addToPlot is used to mask and crop the data. This is useful if a small area (e.g., WCA3A) is of interest.
+#' @param addToPlot If you'd like an SpatVector added to the plot, pass it to this argument.
+#' @param maskPlot If set to TRUE, the SpatVector in addToPlot is used to mask and crop the data. This is useful if a small area (e.g., WCA3A) is of interest.
 #' 
 #' @return list \code{plotEDENChange} returns a list with the calculated rates (stageChange; units are feet/week), rates categorized into poor/fair/good (categories), a description of the time period used (description), and the criteria used to assign categories (criteria; units are feet/week) 
 #' 
@@ -35,14 +35,18 @@
 #' }
 #' 
 #' @importFrom fireHydro getEDEN
-#' @importFrom raster reclassify
-#' @importFrom raster rasterToPolygons
-#' @importFrom raster plot
-#' @importFrom raster crop
-#' @importFrom raster crs
-#' @importFrom raster unique
+#' @importFrom terra rast
+#' @importFrom terra vect
+#' @importFrom terra classify
+#' @importFrom terra as.polygons
+#' @importFrom terra plot
+#' @importFrom terra crop
+#' @importFrom terra mask
+#' @importFrom terra values
+#' @importFrom terra crs
+#' @importFrom terra unique
 #' @importFrom graphics legend
-#' @importFrom sp spTransform
+#' @importFrom terra project
 #' @importFrom graphics par
 #' @importFrom grDevices png
 #' @importFrom grDevices dev.off
@@ -60,8 +64,8 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
                          otherName = "other", # legend name for additional category
                          otherColor = "darkred", # color to apply to additional category
                          plotOutput = NULL, # NULL or filename
-                         addToPlot = NA, # optional spdf to add to plot. TODO: accept a list of spdfs
-                         maskPlot  = FALSE  # If TRUE, raster data are clipped/masked using spdf in addToPlot[1]
+                         addToPlot = NA, # optional spatVector to add to plot. TODO: accept a list of spatVectors
+                         maskPlot  = FALSE  # If TRUE, raster data are clipped/masked using spatVector in addToPlot[1]
 ) {
   
   colorNames <- c("red", "yellow", "green")
@@ -80,21 +84,37 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
   EDEN_date2 <- gsub(x = as.Date(eden1$date, format = "%Y%m%d") - changePeriod, pattern = "-", replacement = "")
   eden2 <- fireHydro::getEDEN(EDEN_date = EDEN_date2,  returnType = "raster")
   
+  ### convert to terra::SpatRaster
+  if (!grepl(x = tolower(class(eden1$data)), pattern = "spatraster")){
+    eden1$data <- terra::rast(eden1$data*1, crs = terra::crs(eden1$data, proj = TRUE))
+  }
+  if (!grepl(x = tolower(class(eden2$data)), pattern = "spatraster")){
+    eden2$data <- terra::rast(eden2$data*1, crs = terra::crs(eden2$data, proj = TRUE))
+  }
+  if (!is.null(addToPlot)) {
+    if (!grepl(x = tolower(class(eden1$data)), pattern = "spatvector")){
+      addToPlot <- terra::vect(addToPlot, crs = terra::crs(addToPlot, proj = TRUE))
+    }
+  }
+  
   ### get time period in weeks
   timePeriod <- as.numeric(as.Date(eden1$date, format = "%Y%m%d") - as.Date(eden2$date, format = "%Y%m%d")) / 7 
   
   ### plot prep: create EDEN boundary, set title, etc.
   mainTitle <- paste("Recession/ascension rate categories \n", as.Date(eden2$date, format = "%Y%m%d"), "to", as.Date(eden1$date, format = "%Y%m%d"))
-  r <- raster::reclassify(eden2$data, cbind(-Inf, Inf, 1))
+  # r <- raster::reclassify(eden2$data, cbind(-Inf, Inf, 1))
+  r <- terra::classify(eden2$data, cbind(-Inf, Inf, 1))
   # convert to polygons (you need to have package 'rgeos' installed for this to work)
-  pp <- raster::rasterToPolygons(r, dissolve=TRUE)
+  # pp <- raster::rasterToPolygons(r, dissolve=TRUE)
+  pp  <- terra::as.polygons(r, dissolve=TRUE)
+  
   
   ### get recession rates in feet per week (cm / 2.54 / 12 /wks)
   recRates <- (eden1$data - eden2$data) / 2.54 / 12 / timePeriod # positive = ascension
   
   if (maskPlot == TRUE) {
-    recRates <- crop(x = recRates, y    = addToPlot)
-    recRates <- mask(x = recRates, mask = addToPlot)
+    recRates <- terra::crop(x = recRates, y    = addToPlot)
+    recRates <- terra::mask(x = recRates, mask = addToPlot)
   } 
   
   
@@ -117,20 +137,21 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
   }
   rclmat <- matrix(m, ncol=3, byrow=FALSE)
   
-  recRatesReclassed <- raster::reclassify(recRates, rclmat)
+  recRatesReclassed <- terra::classify(x = recRates, rcl = rclmat)
+  
   
   ### remove any missing categories or plot will be messed up
-  colorNames    <- colorNames[raster::unique(recRatesReclassed)]
-  categoryNames <- categoryNames[raster::unique(recRatesReclassed)]
+  colorNames    <- colorNames[sort(terra::unique(terra::values(recRatesReclassed, na.rm = TRUE)))]
+  categoryNames <- categoryNames[sort(terra::unique(terra::values(recRatesReclassed, na.rm = TRUE)))]
   
   # plot reclassified data
   if (!is.null(plotOutput)) {
     grDevices::png(plotOutput, width = 5, height = 6, units = "in", res = 150)
     graphics::par(mar = c(0.5, 0.5, 3.25, 0.5))
   }
-  raster::plot(recRatesReclassed,
+  terra::plot(recRatesReclassed,
        legend = FALSE,
-       col = colorNames, axes = FALSE, box=FALSE,
+       col = colorNames, axes = FALSE, #box=FALSE,
        main = mainTitle)
   graphics::legend("topleft",
          legend = categoryNames,
@@ -139,11 +160,11 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
          bg = "white", 
          bty = "n"
   ) # turn off legend border
-  raster::plot(pp, add = TRUE)
-  if (grepl(x = class(addToPlot), pattern = "SpatialPolygonsDataFrame|SpatialPointsDataFrame")) {
-    addToPlot <- sp::spTransform(addToPlot, raster::crs(fireHydro::edenDEM))
-    addToPlot <- raster::crop(x = addToPlot, y = recRatesReclassed)
-    raster::plot(addToPlot, add = TRUE, border = "gray")
+  terra::plot(pp, add = TRUE)
+  if (grepl(x = class(addToPlot), pattern = "SpatVector")) {
+    # addToPlot <- terra::project(addToPlot, terra::crs(fireHydro::edenDEM, proj = TRUE)) # necessary?
+    addToPlot <- terra::crop(x = addToPlot, y = recRatesReclassed)
+    terra::plot(addToPlot, add = TRUE, border = "gray")
   }
   if (!is.null(plotOutput)) {
     grDevices::dev.off()
