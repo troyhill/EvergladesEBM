@@ -12,9 +12,8 @@
 #' 
 #' @examples
 #' getColors(uniqueValues = range(-10:10), binSize = 5)
-#' getColors(uniqueValues = range(-10:10), binSize = 1)
+#' getColors(uniqueValues = range(-10:10), binSize = 3)
 #' 
-#' @importFrom plyr round_any
 #' @importFrom grDevices colorRampPalette
 #'  
 #' @export
@@ -25,9 +24,22 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
                     binSize = 0.025,   # for asymmetries: https://stackoverflow.com/a/29280215
                     colorGradient = c("red", "white", "blue"),
                     threshold     = 0) {
+  round.choose <- function(x, roundTo, dir = 1) {
+    ### function reproduces plyr::round_any
+    ### modified from https://stackoverflow.com/a/32508105/3723870
+    if(dir == 1) {  ##ROUND UP
+      x + (roundTo %% roundTo) 
+    } else {
+      if(dir == 0) {  ##ROUND DOWN
+        x - (x %% roundTo)
+      }
+    }
+  }
   ### round max and min values to highest/lowest increment of binSize
-  Min <- plyr::round_any(min(uniqueValues, na.rm = TRUE), accuracy = binSize, f = floor)
-  Max <- plyr::round_any(max(uniqueValues, na.rm = TRUE), accuracy = binSize, f = ceiling)
+  # Min <- plyr::round_any(min(uniqueValues, na.rm = TRUE), accuracy = binSize, f = floor)
+  # Max <- plyr::round_any(max(uniqueValues, na.rm = TRUE), accuracy = binSize, f = ceiling)
+  Min <- round.choose(x = min(uniqueValues, na.rm = TRUE), roundTo = binSize, dir = 0)
+  Max <- round.choose(x = max(uniqueValues, na.rm = TRUE), roundTo = binSize, dir = 1)
   
   uniqueValues <- seq(from = Min,
                       to   = Max,

@@ -19,7 +19,6 @@ Depends:
     fireHydro,
     terra,
     raster,
-    plyr,
     ggplot2
 RoxygenNote: 7.1.2
 Suggests: 

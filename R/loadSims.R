@@ -47,6 +47,7 @@ loadSims <- function(directory = file.choose()
   ### have to use raster for loading netcdfs; replace this with ncdf4 use in future
   altQ_dat   <- lapply(X = fileNames[1:2], FUN = raster::stack) # water depth, cm w.r.t. soil surface.
   # https://gis.stackexchange.com/a/413678/32782: "raster reads the CDF files with the ncdf4 package. In contrast, terra reads all data with GDAL. That is convenient from a programming perspective, but GDAL is very inefficient in dealing with datasets with many layers" 'For now, it is better to use raster to read NetCDF files with many layers.'
+  # terra isn't preserving dates as layer names, and takes forever
   # e <- terra::rast(fileNames[1])
   # e2 <- stack(fileNames[1])
   # altQ_dat   <- lapply(X = fileNames[1:2], FUN = terra::rast) # water depth, cm w.r.t. soil surface.

@@ -28,6 +28,6 @@ Converts feet to centimeters
 }
 \examples{
 getColors(uniqueValues = range(-10:10), binSize = 5)
-getColors(uniqueValues = range(-10:10), binSize = 1)
+getColors(uniqueValues = range(-10:10), binSize = 3)
 
 }
