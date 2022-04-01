@@ -13,6 +13,8 @@
 #' @examples
 #' getColors(uniqueValues = range(-10:10), binSize = 5)
 #' getColors(uniqueValues = range(-10:10), binSize = 3)
+#' getColors(uniqueValues = range(-10:10), binSize = 3)
+#' getColors(uniqueValues = range(-13:67)/100, binSize = 0.025)
 #' 
 #' @importFrom grDevices colorRampPalette
 #'  
@@ -24,16 +26,35 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
                     binSize = 0.025,   # for asymmetries: https://stackoverflow.com/a/29280215
                     colorGradient = c("red", "white", "blue"),
                     threshold     = 0) {
+  # round.choose <- function(x, roundTo, dir = 1) {
+  #   ### function reproduces plyr::round_any
+  #   ### modified from https://stackoverflow.com/a/32508105/3723870
+  #   if(dir == 1) {  ##ROUND UP
+  #     x + (roundTo %% roundTo)
+  #   } else {
+  #     if(dir == 0) {  ##ROUND DOWN
+  #       x - (x %% roundTo)
+  #     }
+  #   }
+  # }
   round.choose <- function(x, roundTo, dir = 1) {
-    ### function reproduces plyr::round_any
-    ### modified from https://stackoverflow.com/a/32508105/3723870
+    convertBack <- FALSE
+    if (roundTo < 1) {
+      x <- x * 1000
+      roundTo <- roundTo * 1000
+      convertBack <- TRUE
+    }
     if(dir == 1) {  ##ROUND UP
-      x + (roundTo %% roundTo) 
+      ans <- x + (roundTo - x %% roundTo)
     } else {
       if(dir == 0) {  ##ROUND DOWN
-        x - (x %% roundTo)
+        ans <- x - (x %% roundTo)
       }
     }
+    if (convertBack) {
+      ans <- ans / 1000
+    }
+    return(ans)
   }
   ### round max and min values to highest/lowest increment of binSize
   # Min <- plyr::round_any(min(uniqueValues, na.rm = TRUE), accuracy = binSize, f = floor)
@@ -45,7 +66,7 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
                       to   = Max,
                       by   = binSize)
   isOdd <- length(uniqueValues) %% 2
-  if (isOdd == 0) {
+  if ((isOdd == 0) & !(0 %in% uniqueValues)) {
     uniqueValues <- c(uniqueValues, max(uniqueValues) + binSize)
   }
   
@@ -64,8 +85,12 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   ## In your example, this line sets the color for values between 49 and 51. 
   # rampcols[nHalf] = rgb(t(col2rgb("white")), maxColorValue=256) 
   
-  rb1 = seq(from =  Min, to = Thresh, by = binSize) # length.out=nHalf+1)
-  rb2 = seq(Thresh + binSize, Max, by = binSize) # length.out=nHalf+1
+  rb1 <- seq(from =  Min, to = Thresh, by = binSize) # length.out=nHalf+1)
+  if (Thresh + binSize > Max) {
+    rb2 <- seq(Thresh + binSize, Max, by = binSize) # length.out=nHalf+1
+  } else {
+    rb2 <- Max
+  }
   rampbreaks = c(rb1, rb2)
   
   list(key    = rampbreaks, 

@@ -3,6 +3,7 @@
 #' @description Calculates two-point ascension/recession rates from EDEN data. Produces a map, and two versions of the SpatRaster output (one with rates of change, and one with rates categorized into poor/fair/good)
 #' 
 #' @param EDEN_date    Date (format = '\%Y-\%m-\%d') at end of recession rate calculation. Default behavior is to find the nearest Sunday.
+#' @param EDEN_date2   Date (format = '\%Y-\%m-\%d') at beginning of recession rate calculation. Default behavior is to calculate this based on the changePeriod argument
 #' @param changePeriod Time period (units = days) over which stage changes are measured. Default is seven days (e.g., Sunday-Sunday).
 #' @param poor Vector of paired values identifying 'poor' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first, e.g., c(0, Inf, -Inf, -1.8) 
 #' @param fair Vector of paired values identifying 'fair' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first
@@ -11,8 +12,9 @@
 #' @param otherName Legend entry for the additional category (optional)
 #' @param otherColor Color to be used for additional category (optional)
 #' @param plotOutput If the produced plot should be saved, use this argument to set the filename (include any extension, e.g. "plot.png").
-#' @param addToPlot If you'd like an SpatVector added to the plot, pass it to this argument.
-#' @param maskPlot If set to TRUE, the SpatVector in addToPlot is used to mask and crop the data. This is useful if a small area (e.g., WCA3A) is of interest.
+#' @param addToPlot If you'd like an `SpatVector` added to the plot, pass it to this argument.
+#' @param maskPlot If set to `TRUE`, the `SpatVector` in `addToPlot` is used to mask and crop the data. This is useful if a small area (e.g., WCA3A) is of interest.
+#' @param download.method Argument used in `getEDEN()` call. Method to be used for downloading files. See options in `utils::download.file`
 #' 
 #' @return list \code{plotEDENChange} returns a list with the calculated rates (stageChange; units are feet/week), rates categorized into poor/fair/good (categories), a description of the time period used (description), and the criteria used to assign categories (criteria; units are feet/week) 
 #' 
@@ -56,6 +58,7 @@
 
 
 plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Date(),"%w")), # format = '%Y-%m-%d'
+                           EDEN_date2   = NULL,
                          changePeriod = 7, # units = days
                          poor = c(c(0, Inf), c(-Inf, -0.18)), # feet/week
                          fair = c(c(-0.01, 0), c(-0.18, -0.05)),
@@ -65,7 +68,8 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
                          otherColor = "darkred", # color to apply to additional category
                          plotOutput = NULL, # NULL or filename
                          addToPlot = NA, # optional spatVector to add to plot. TODO: accept a list of spatVectors
-                         maskPlot  = FALSE  # If TRUE, raster data are clipped/masked using spatVector in addToPlot[1]
+                         maskPlot  = FALSE,  # If TRUE, raster data are clipped/masked using spatVector in addToPlot[1]
+                         download.method = "libcurl" # passed to getEDEN
 ) {
   
   colorNames <- c("red", "yellow", "green")
@@ -78,11 +82,16 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
   }
   
   ### pull EDEN data
-  EDEN_date1  <- gsub(x = EDEN_date, pattern = "-", replacement = "")
-  eden1 <- fireHydro::getEDEN(EDEN_date = EDEN_date1,  returnType = "raster")
-  
-  EDEN_date2 <- gsub(x = as.Date(eden1$date, format = "%Y%m%d") - changePeriod, pattern = "-", replacement = "")
-  eden2 <- fireHydro::getEDEN(EDEN_date = EDEN_date2,  returnType = "raster")
+  if (!any(grepl(x = class(EDEN_date), pattern = 'eden|list'))) {
+    EDEN_date1  <- gsub(x = EDEN_date, pattern = "-", replacement = "")
+    eden1 <- fireHydro::getEDEN(EDEN_date = EDEN_date1,  returnType = "raster",  download.method =  download.method)
+    ### EDEN_date2 will be null, rec rates calculated from changePeriod
+    EDEN_date2 <- gsub(x = as.Date(eden1$date, format = "%Y%m%d") - changePeriod, pattern = "-", replacement = "")
+    eden2 <- fireHydro::getEDEN(EDEN_date = EDEN_date2,  returnType = "raster",  download.method =  download.method)
+  } else {
+    eden1 <- EDEN_date
+    eden2 <- EDEN_date2
+  }
   
   ### convert to terra::SpatRaster
   if (!grepl(x = tolower(class(eden1$data)), pattern = "spatraster")){
@@ -92,7 +101,7 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
     eden2$data <- terra::rast(eden2$data*1, crs = terra::crs(eden2$data, proj = TRUE))
   }
   if (!is.null(addToPlot)) {
-    if (!grepl(x = tolower(class(eden1$data)), pattern = "spatvector")){
+    if (!grepl(x = tolower(class(addToPlot)), pattern = "spatvector")){
       addToPlot <- terra::vect(addToPlot, crs = terra::crs(addToPlot, proj = TRUE))
     }
   }
@@ -114,7 +123,7 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
   
   if (maskPlot == TRUE) {
     recRates <- terra::crop(x = recRates, y    = addToPlot)
-    recRates <- terra::mask(x = recRates, mask = addToPlot)
+    recRates <- terra::mask(x = recRates, mask = addToPlot, overwrite = TRUE)
   } 
   
   
