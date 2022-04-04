@@ -29,5 +29,8 @@ Converts feet to centimeters
 \examples{
 getColors(uniqueValues = range(-10:10), binSize = 5)
 getColors(uniqueValues = range(-10:10), binSize = 3)
+getColors(uniqueValues = range(0:100), binSize = 5, threshold = 50) # odd behavior
+getColors(uniqueValues = range(0:99), binSize = 5, threshold = 50)
+getColors(uniqueValues = range(-13:67)/100, binSize = 0.025)
 
 }

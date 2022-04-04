@@ -13,7 +13,8 @@
 #' @examples
 #' getColors(uniqueValues = range(-10:10), binSize = 5)
 #' getColors(uniqueValues = range(-10:10), binSize = 3)
-#' getColors(uniqueValues = range(-10:10), binSize = 3)
+#' getColors(uniqueValues = range(0:100), binSize = 5, threshold = 50) # odd behavior
+#' getColors(uniqueValues = range(0:99), binSize = 5, threshold = 50)
 #' getColors(uniqueValues = range(-13:67)/100, binSize = 0.025)
 #' 
 #' @importFrom grDevices colorRampPalette
@@ -45,7 +46,8 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
       convertBack <- TRUE
     }
     if(dir == 1) {  ##ROUND UP
-      ans <- x + (roundTo - x %% roundTo)
+      ans <- x + (roundTo - x %% roundTo) # original
+      # ans <- x + (roundTo %% roundTo) # modified
     } else {
       if(dir == 0) {  ##ROUND DOWN
         ans <- x - (x %% roundTo)
@@ -66,7 +68,7 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
                       to   = Max,
                       by   = binSize)
   isOdd <- length(uniqueValues) %% 2
-  if ((isOdd == 0) & !(0 %in% uniqueValues)) {
+  if ((isOdd == 0) & !(threshold %in% uniqueValues)) { #  
     uniqueValues <- c(uniqueValues, max(uniqueValues) + binSize)
   }
   
@@ -86,7 +88,7 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   # rampcols[nHalf] = rgb(t(col2rgb("white")), maxColorValue=256) 
   
   rb1 <- seq(from =  Min, to = Thresh, by = binSize) # length.out=nHalf+1)
-  if (Thresh + binSize > Max) {
+  if ((Thresh + binSize) < Max) {
     rb2 <- seq(Thresh + binSize, Max, by = binSize) # length.out=nHalf+1
   } else {
     rb2 <- Max
