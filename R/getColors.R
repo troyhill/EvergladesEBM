@@ -38,6 +38,8 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   #     }
   #   }
   # }
+  sigfig_digits <- nchar(sapply(X = strsplit(as.character(binSize), "\\."), FUN = '[', 2))
+  
   round.choose <- function(x, roundTo, dir = 1) {
     convertBack <- FALSE
     if (roundTo < 1) {
@@ -64,20 +66,21 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   Min <- round.choose(x = min(uniqueValues, na.rm = TRUE), roundTo = binSize, dir = 0)
   Max <- round.choose(x = max(uniqueValues, na.rm = TRUE), roundTo = binSize, dir = 1)
   
-  uniqueValues <- seq(from = Min,
-                      to   = Max,
-                      by   = binSize)
-  isOdd <- length(uniqueValues) %% 2
-  if ((isOdd == 0) & !(threshold %in% uniqueValues)) { #  
-    uniqueValues <- c(uniqueValues, max(uniqueValues) + binSize)
+  uniqueValues_new <- round(x = seq(from = Min,
+                                    to   = Max,
+                                    by   = binSize), 
+                            digits = sigfig_digits)
+  isOdd <- length(uniqueValues_new) %% 2
+  if ((isOdd == 0) & !(threshold %in% uniqueValues_new)) { #  
+    uniqueValues_new <- c(uniqueValues_new, max(uniqueValues_new) + binSize)
   }
   
   Thresh <- threshold
-  nHalf  <- length(uniqueValues)/2
-  valsAboveThreshold <- length(uniqueValues[uniqueValues > Thresh])
-  valsBelowThreshold <- length(uniqueValues[uniqueValues < Thresh])
-  Min <- min(uniqueValues, na.rm = TRUE)
-  Max <- max(uniqueValues, na.rm = TRUE)
+  nHalf  <- length(uniqueValues_new)/2
+  valsAboveThreshold <- length(uniqueValues_new[uniqueValues_new > Thresh])
+  valsBelowThreshold <- length(uniqueValues_new[uniqueValues_new < Thresh])
+  Min <- min(uniqueValues_new, na.rm = TRUE)
+  Max <- max(uniqueValues_new, na.rm = TRUE)
   
   ## Make vector of colors for values below threshold
   rc1 <- grDevices::colorRampPalette(colors = c(colorGradient[1], colorGradient[2]), space="Lab")(valsBelowThreshold)    
@@ -98,4 +101,5 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   list(key    = rampbreaks, 
        colors = rampcols)
 }
+
 
