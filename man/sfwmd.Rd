@@ -4,10 +4,10 @@
 \alias{sfwmd}
 \title{Watershed shapefile used by the South Florida Water Management District}
 \format{
-a SpatialPolygonsDataFrame
+spdf
 }
 \description{
-A SpatialPolygonsDataFrame downloaded and slightly modified from https://www.sfwmd.gov/science-data/gis. proj4string :[+proj=utm +zone=17 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+A spdf downloaded and slightly modified from https://www.sfwmd.gov/science-data/gis. proj4string :+proj=utm +zone=17 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 }
 \examples{
 summary(sfwmd)

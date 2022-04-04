@@ -8,20 +8,17 @@ extractSimData(
   simulationData,
   targetLocations,
   targetLocationNames = NULL,
-  func = mean,
-  beginDate = Sys.Date()
+  func = mean
 )
 }
 \arguments{
-\item{simulationData}{a list of netCDF simulation data in rasterStack format (e.g., "datList" object)}
+\item{simulationData}{a list of netCDF simulation data in SpatRaster format (e.g., "datList" object)}
 
-\item{targetLocations}{locations to extract data from; must be class SpatialPointsDataFrame or SpatialPolygonsDataFrame}
+\item{targetLocations}{locations to extract data from; must be class SpatVector}
 
 \item{targetLocationNames}{option to specify the name of target locations (e.g., pts$gage)}
 
 \item{func}{function to apply to the data  (if multiple raster cells are in location of interest). The function name can be a character string or the function object (i.e., "mean" and mean produce identical output)}
-
-\item{beginDate}{disregarded; this is now determined internally. the first date in the simulation time series}
 }
 \value{
 a list.
@@ -36,6 +33,7 @@ It returns a list with four objects (permutations of the same data):
 This function extracts data and aggregates EverForecast simulation data (contained in a list of netCDFs) for spatial locations of interest. The output is a list of four permutations of the same data. This function can take a very long time depending on the number of regions-of-interest and their size (e.g., 2 hours for ~50 Combined Operations Plan indicator regions).
 }
 \examples{
+\dontrun{
 ### step 1: identify region(s) of interest
 locs   <- IRMap[[2]]
 loc    <- locs[locs$INDICATOR \%in\% 118:119, ]
@@ -51,4 +49,5 @@ loc    <- locs[locs$INDICATOR \%in\% 118:119, ]
 # EFDat <- extractSimData(simulationData      = simDat, 
 #                           targetLocations     = loc, 
 #                           targetLocationNames = loc$NAME)
+}
 }

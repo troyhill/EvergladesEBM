@@ -7,7 +7,7 @@
 extractEDEN(targetLocations, targetLocationNames, EDEN_data)
 }
 \arguments{
-\item{targetLocations}{locations to extract data from; must be class SpatialPointsDataFrame or SpatialPolygonsDataFrame}
+\item{targetLocations}{locations to extract data from; should be class SpatVector or sf}
 
 \item{targetLocationNames}{option to specify the name of target locations (e.g., pts$gage)}
 

@@ -1,10 +1,10 @@
 #' 
 #' @title Watershed shapefile used by the South Florida Water Management District 
 #' 
-#' @description A SpatialPolygonsDataFrame downloaded and slightly modified from https://www.sfwmd.gov/science-data/gis. proj4string :[+proj=utm +zone=17 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+#' @description A spdf downloaded and slightly modified from https://www.sfwmd.gov/science-data/gis. proj4string :+proj=utm +zone=17 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 #'
 #' @name sfwmd
-#' @format a SpatialPolygonsDataFrame
+#' @format spdf
 #' @examples 
 #' summary(sfwmd)
 #' 

@@ -4,13 +4,12 @@
 \alias{treePts}
 \title{Tree island locations and elevations}
 \format{
-a SpatialPolygonsDataFrame
+a SpatVector
 }
 \description{
-A SpatialPointsDataFrame with tree island elevations. Data provided by SFWMD. epsg:4326 (equivlane to proj4string :[+proj=utm +zone=17 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs). Elevations are in a variety of units (ft, cm, m) and datums (NGVD29, NAVD88). An hclust.cluster column includes hierarchical cluster groups identified by Jed Redwine.
+A SpatVector with tree island elevations. Data provided by SFWMD. epsg:4326 (equivlane to proj4string :+proj=utm +zone=17 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs). Elevations are in a variety of units (ft, cm, m) and datums (NGVD29, NAVD88). An hclust.cluster column includes hierarchical cluster groups identified by Jed Redwine.
 }
 \examples{
-summary(treePts)
 
 \dontrun{
 ### code used to generate object 
