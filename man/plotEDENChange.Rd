@@ -5,8 +5,8 @@
 \title{Calculate ascension/recession rates over some time period}
 \usage{
 plotEDENChange(
-  EDEN_date = Sys.Date() - as.numeric(format(Sys.Date(), "\%w")),
-  EDEN_date2 = NULL,
+  EDEN_end = Sys.Date() - as.numeric(format(Sys.Date(), "\%w")),
+  EDEN_begin = NULL,
   changePeriod = 7,
   poor = c(c(0, Inf), c(-Inf, -0.18)),
   fair = c(c(-0.01, 0), c(-0.18, -0.05)),
@@ -21,11 +21,11 @@ plotEDENChange(
 )
 }
 \arguments{
-\item{EDEN_date}{Date (format = '\%Y-\%m-\%d') at end of recession rate calculation. Default behavior is to find the nearest Sunday.}
+\item{EDEN_end}{EDEN list (data/date; see `fireHydro::getEDEN`` for more details) for the end of the recession calculation period.}
 
-\item{EDEN_date2}{Date (format = '\%Y-\%m-\%d') at beginning of recession rate calculation. Default behavior is to calculate this based on the changePeriod argument}
+\item{EDEN_begin}{EDEN list (data/date; see `fireHydro::getEDEN`` for more details) for the beginning of the recession calculation period.}
 
-\item{changePeriod}{Time period (units = days) over which stage changes are measured. Default is seven days (e.g., Sunday-Sunday).}
+\item{changePeriod}{Deprecated. Time period (units = days) over which stage changes are measured. Default is seven days (e.g., Sunday-Sunday).}
 
 \item{poor}{Vector of paired values identifying 'poor' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first, e.g., c(0, Inf, -Inf, -1.8)}
 

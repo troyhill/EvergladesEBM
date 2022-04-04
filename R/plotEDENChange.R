@@ -2,9 +2,9 @@
 #'
 #' @description Calculates two-point ascension/recession rates from EDEN data. Produces a map, and two versions of the SpatRaster output (one with rates of change, and one with rates categorized into poor/fair/good)
 #' 
-#' @param EDEN_date    Date (format = '\%Y-\%m-\%d') at end of recession rate calculation. Default behavior is to find the nearest Sunday.
-#' @param EDEN_date2   Date (format = '\%Y-\%m-\%d') at beginning of recession rate calculation. Default behavior is to calculate this based on the changePeriod argument
-#' @param changePeriod Time period (units = days) over which stage changes are measured. Default is seven days (e.g., Sunday-Sunday).
+#' @param EDEN_end    EDEN list (data/date; see `fireHydro::getEDEN`` for more details) for the end of the recession calculation period.
+#' @param EDEN_begin  EDEN list (data/date; see `fireHydro::getEDEN`` for more details) for the beginning of the recession calculation period.
+#' @param changePeriod Deprecated. Time period (units = days) over which stage changes are measured. Default is seven days (e.g., Sunday-Sunday).
 #' @param poor Vector of paired values identifying 'poor' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first, e.g., c(0, Inf, -Inf, -1.8) 
 #' @param fair Vector of paired values identifying 'fair' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first
 #' @param good Vector of paired values identifying 'good' ascension/recession rates. Units must be feet/week. Pairs must have the lower value first.
@@ -36,7 +36,6 @@
 #' extract(plotOut$categories, bay.coords, fun = mean)
 #' }
 #' 
-#' @importFrom fireHydro getEDEN
 #' @importFrom terra rast
 #' @importFrom terra vect
 #' @importFrom terra classify
@@ -57,8 +56,8 @@
 
 
 
-plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Date(),"%w")), # format = '%Y-%m-%d'
-                           EDEN_date2   = NULL,
+plotEDENChange <- function(EDEN_end    = Sys.Date() - as.numeric(format(Sys.Date(),"%w")), # format = '%Y-%m-%d'
+                           EDEN_begin   = NULL,
                          changePeriod = 7, # units = days
                          poor = c(c(0, Inf), c(-Inf, -0.18)), # feet/week
                          fair = c(c(-0.01, 0), c(-0.18, -0.05)),
@@ -82,15 +81,16 @@ plotEDENChange <- function(EDEN_date    = Sys.Date() - as.numeric(format(Sys.Dat
   }
   
   ### pull EDEN data
-  if (!any(grepl(x = class(EDEN_date), pattern = 'eden|list'))) {
-    EDEN_date1  <- gsub(x = EDEN_date, pattern = "-", replacement = "")
-    eden1 <- fireHydro::getEDEN(EDEN_date = EDEN_date1,  returnType = "raster",  download.method =  download.method)
-    ### EDEN_date2 will be null, rec rates calculated from changePeriod
-    EDEN_date2 <- gsub(x = as.Date(eden1$date, format = "%Y%m%d") - changePeriod, pattern = "-", replacement = "")
-    eden2 <- fireHydro::getEDEN(EDEN_date = EDEN_date2,  returnType = "raster",  download.method =  download.method)
+  if (!any(grepl(x = class(EDEN_end), pattern = 'eden|list'))) {
+    stop('EDEN data are required. ')
+    # EDEN_date1  <- gsub(x = EDEN_end, pattern = "-", replacement = "")
+    # # eden1 <- fireHydro::getEDEN(EDEN_date = EDEN_date1,  returnType = "raster",  download.method =  download.method)
+    # ### EDEN_date2 will be null, rec rates calculated from changePeriod
+    # EDEN_date2 <- gsub(x = EDEN_begin, pattern = "-", replacement = "") # gsub(x = as.Date(eden1$date, format = "%Y%m%d") - changePeriod, pattern = "-", replacement = "")
+    # # eden2 <- fireHydro::getEDEN(EDEN_date = EDEN_date2,  returnType = "raster",  download.method =  download.method)
   } else {
-    eden1 <- EDEN_date
-    eden2 <- EDEN_date2
+    eden1 <- EDEN_end
+    eden2 <- EDEN_begin
   }
   
   ### convert to terra::SpatRaster

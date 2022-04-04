@@ -16,7 +16,6 @@ Remotes:
     troyhill/fireHydro
 Depends:
     R (>= 3.5.0),
-    fireHydro,
     terra,
     raster,
     ggplot2
