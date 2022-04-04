@@ -1,3 +1,10 @@
+EvergladesEBM version 0.0.03 (release date: TBD)
+==================
+* removed plyr, fireHydro dependencies
+* plotEDENChange not as automated bc of need to independently pull EDEN data
+* utility functions: getColors
+
+
 EvergladesEBM version 0.0.01 (release date: 2020-12-17)
 ==================
 Changes:
