@@ -15,7 +15,7 @@ LazyData: true
 Depends:
     R (>= 3.5.0),
     terra,
-    raster,
+    ncdf4,
     ggplot2
 RoxygenNote: 7.1.2
 Suggests: 

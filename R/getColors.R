@@ -39,6 +39,9 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   #   }
   # }
   sigfig_digits <- nchar(sapply(X = strsplit(as.character(binSize), "\\."), FUN = '[', 2))
+  if (is.na(sigfig_digits)) {
+    sigfig_digits <- 1
+  }
   
   round.choose <- function(x, roundTo, dir = 1) {
     convertBack <- FALSE

@@ -1,6 +1,6 @@
-EvergladesEBM version 0.0.03 (release date: TBD)
+EvergladesEBM version 0.0.03 (release date: 2022-04-04)
 ==================
-* removed plyr, fireHydro dependencies
+* removed plyr, fireHydro, terra, raster, rgdal dependencies
 * plotEDENChange not as automated bc of need to independently pull EDEN data
 * utility functions: getColors
 

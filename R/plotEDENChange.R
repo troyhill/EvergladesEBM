@@ -117,7 +117,9 @@ plotEDENChange <- function(EDEN_end    = Sys.Date() - as.numeric(format(Sys.Date
   # pp <- raster::rasterToPolygons(r, dissolve=TRUE)
   pp  <- terra::as.polygons(r, dissolve=TRUE)
   
-  
+  if (!identical(terra::crs(eden2$data, proj = TRUE), terra::crs(eden1$data, proj = TRUE))) {
+    eden1$data <- terra::project(x = eden1$data, y = terra::crs(eden2$data, proj = TRUE))
+  }
   ### get recession rates in feet per week (cm / 2.54 / 12 /wks)
   recRates <- (eden1$data - eden2$data) / 2.54 / 12 / timePeriod # positive = ascension
   
