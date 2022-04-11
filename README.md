@@ -2,12 +2,10 @@
 
 
 
-Analytical tools supporting ecosystem based management in south Florida
-
 
 ## What you have here
 
-`EvergladesEBM` is an R package with analytical tools supporting ecosystem based management in south Florida.
+`EvergladesEBM` is an R package to support ecosystem based management in south Florida.
 
 
 
@@ -20,7 +18,7 @@ remotes::install_github("troyhill/EvergladesEBM", ref = "main")
 
 ## Usage
 
-EvergladesEBM can be used for post-processing EverForecast model output and making direct comparisons to ecological recommendations.
+EvergladesEBM can be used for post-processing EverForecast model output and making direct comparisons between observed conditions and ecological recommendations.
 
 
 ```
@@ -28,14 +26,13 @@ library(EvergladesEBM)
 
 ### map of recession rates over past two weeks
 ### function is highly flexible - see ?plotEDENChange for options
-twoWeeks <- plotEDENChange(EDEN_date = Sys.Date(), 
-           changePeriod = 2, # weeks
-           addToPlot = sfwmd)
+eden_end   <- fireHydro::getEDEN(Sys.Date(), returnType = 'terra')
+eden_begin <- fireHydro::getEDEN(Sys.Date() - 8, returnType = 'terra')
+
+rec_rates <- plotEDENChange(EDEN_begin = eden_begin, EDEN_end = eden_end, 
+                            addToPlot = sfwmd.shp)
+
            
-### recession/ascension during past month
-pastMonth <- plotEDENChange(EDEN_date = Sys.Date(), 
-           changePeriod = 4, # weeks
-           addToPlot = sfwmd)
 
 ```
 

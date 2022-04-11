@@ -55,8 +55,12 @@ Calculates two-point ascension/recession rates from EDEN data. Produces a map, a
 }
 \examples{
 \dontrun{
-### by default, the most recent one-week period in EDEN is used
-plotOut <- plotEDENChange(addToPlot = sfwmd.shp)
+### pull some eden data
+eden1 <- fireHydro::getEDEN(Sys.Date(), returnType = 'terra')
+eden2 <- fireHydro::getEDEN(Sys.Date() - 8, returnType = 'terra')
+
+plotOut <- plotEDENChange(EDEN_begin = eden2, EDEN_end = eden1, 
+                           addToPlot = sfwmd.shp)
 ylim.range <- max(abs(floor(cellStats(plotOut$stageChange, min))), 
 abs(ceiling(cellStats(plotOut$stageChange, max))))
 

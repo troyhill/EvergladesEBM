@@ -21,8 +21,12 @@
 #' 
 #' @examples
 #' \dontrun{
-#' ### by default, the most recent one-week period in EDEN is used
-#' plotOut <- plotEDENChange(addToPlot = sfwmd.shp)
+#' ### pull some eden data
+#' eden1 <- fireHydro::getEDEN(Sys.Date(), returnType = 'terra')
+#' eden2 <- fireHydro::getEDEN(Sys.Date() - 8, returnType = 'terra')
+#' 
+#' plotOut <- plotEDENChange(EDEN_begin = eden2, EDEN_end = eden1, 
+#'                            addToPlot = sfwmd.shp)
 #' ylim.range <- max(abs(floor(cellStats(plotOut$stageChange, min))), 
 #' abs(ceiling(cellStats(plotOut$stageChange, max))))
 #' 
@@ -58,17 +62,17 @@
 
 plotEDENChange <- function(EDEN_end    = Sys.Date() - as.numeric(format(Sys.Date(),"%w")), # format = '%Y-%m-%d'
                            EDEN_begin   = NULL,
-                         changePeriod = 7, # units = days
-                         poor = c(c(0, Inf), c(-Inf, -0.18)), # feet/week
-                         fair = c(c(-0.01, 0), c(-0.18, -0.05)),
-                         good = c(-0.05, -0.01),
-                         other = NA,     # values for an additional category
-                         otherName = "other", # legend name for additional category
-                         otherColor = "darkred", # color to apply to additional category
-                         plotOutput = NULL, # NULL or filename
-                         addToPlot = NA, # optional spatVector to add to plot. TODO: accept a list of spatVectors
-                         maskPlot  = FALSE,  # If TRUE, raster data are clipped/masked using spatVector in addToPlot[1]
-                         download.method = "libcurl" # passed to getEDEN
+                           changePeriod = 7, # units = days
+                           poor = c(c(0, Inf), c(-Inf, -0.18)), # feet/week
+                           fair = c(c(-0.01, 0), c(-0.18, -0.05)),
+                           good = c(-0.05, -0.01),
+                           other = NA,     # values for an additional category
+                           otherName = "other", # legend name for additional category
+                           otherColor = "darkred", # color to apply to additional category
+                           plotOutput = NULL, # NULL or filename
+                           addToPlot = NA, # optional spatVector to add to plot. TODO: accept a list of spatVectors
+                           maskPlot  = FALSE,  # If TRUE, raster data are clipped/masked using spatVector in addToPlot[1]
+                           download.method = "libcurl" # passed to getEDEN
 ) {
   
   colorNames <- c("red", "yellow", "green")
@@ -135,9 +139,9 @@ plotEDENChange <- function(EDEN_end    = Sys.Date() - as.numeric(format(Sys.Date
   gvals <- matrix(good, nrow = length(good) / 2, byrow = TRUE)
   
   ### add in label. gotta be a more efficient way
-   pvals <- cbind(pvals, 1)
-   fvals <- cbind(fvals, 2)
-   gvals <- cbind(gvals, 3)
+  pvals <- cbind(pvals, 1)
+  fvals <- cbind(fvals, 2)
+  gvals <- cbind(gvals, 3)
   
   # all values > 0 and <= 0.25 become 1, etc.
   m      <- do.call(rbind, list(pvals, fvals, gvals))
@@ -161,15 +165,15 @@ plotEDENChange <- function(EDEN_end    = Sys.Date() - as.numeric(format(Sys.Date
     graphics::par(mar = c(0.5, 0.5, 3.25, 0.5))
   }
   terra::plot(recRatesReclassed,
-       legend = FALSE,
-       col = colorNames, axes = FALSE, #box=FALSE,
-       main = mainTitle)
+              legend = FALSE,
+              col = colorNames, axes = FALSE, #box=FALSE,
+              main = mainTitle)
   graphics::legend("topleft",
-         legend = categoryNames,
-         fill = colorNames,
-         border = FALSE,
-         bg = "white", 
-         bty = "n"
+                   legend = categoryNames,
+                   fill = colorNames,
+                   border = FALSE,
+                   bg = "white", 
+                   bty = "n"
   ) # turn off legend border
   terra::plot(pp, add = TRUE)
   if (grepl(x = class(addToPlot), pattern = "SpatVector")) {
