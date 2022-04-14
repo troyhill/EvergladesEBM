@@ -6,6 +6,7 @@
 #' @param binSize         size of increment between color gradations
 #' @param colorGradient   vector with three colors that form the gradient
 #' @param threshold       value of gradient transition. This value will be the middle color listed in `colorGradient`
+#' @param type            type of scale to be produced: 'continuous' (equal-interval) or 'interval' (unequal intervals).
 #' 
 #' @return A list with color codes and breaks
 #' 
@@ -17,6 +18,10 @@
 #' getColors(uniqueValues = range(0:99), binSize = 5, threshold = 50)
 #' getColors(uniqueValues = range(-13:67)/100, binSize = 0.025)
 #' 
+#' ### lop-sided categories with unequal sizes
+#' getColors2(uniqueValues = c(-365,-30, 0, 10, 30, 60, 365, 400, 700),
+#'  type = 'interval', binSize = 5, threshold = 0)
+#' 
 #' @importFrom grDevices colorRampPalette
 #'  
 #' @export
@@ -27,17 +32,22 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
                     binSize = 0.025,   # for asymmetries: https://stackoverflow.com/a/29280215
                     colorGradient = c("red", "white", "blue"),
                     threshold     = 0) {
-  # round.choose <- function(x, roundTo, dir = 1) {
-  #   ### function reproduces plyr::round_any
-  #   ### modified from https://stackoverflow.com/a/32508105/3723870
-  #   if(dir == 1) {  ##ROUND UP
-  #     x + (roundTo %% roundTo)
-  #   } else {
-  #     if(dir == 0) {  ##ROUND DOWN
-  #       x - (x %% roundTo)
-  #     }
-  #   }
-  # }
+  if(!grepl(x = tolower(type), pattern = 'continuous|interval')) {
+    stop("'type' argument isn't valid. Acceptable inputs: 'continuous' or 'interval'\n")
+  }
+  breaks <- uniqueValues
+  if (grepl(x = tolower(type), pattern = "^interval$")) {
+    center_index <- which.min(abs(breaks)- threshold)
+    # breaks_unindexed <- -floor((length(breaks))/2):ceiling((length(breaks)-3)/2)
+    breaks_indexed <- 1:(length(breaks)-1) - center_index
+    
+    rampcols <- getColors(uniqueValues = breaks_indexed, 
+                           threshold = threshold, 
+                           type      = 'continuous',
+                           binSize   = 1)$colors
+    rampbreaks <- breaks
+  } else if (grepl(x = tolower(type), pattern = "^continuous$")) {
+    
   sigfig_digits <- nchar(sapply(X = strsplit(as.character(binSize), "\\."), FUN = '[', 2))
   if (is.na(sigfig_digits)) {
     sigfig_digits <- 1
@@ -89,7 +99,6 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   rc1 <- grDevices::colorRampPalette(colors = c(colorGradient[1], colorGradient[2]), space="Lab")(valsBelowThreshold)    
   ## Make vector of colors for values above threshold
   rc2 <- grDevices::colorRampPalette(colors = c(colorGradient[2], colorGradient[3]), space="Lab")(valsAboveThreshold)
-  rampcols <- c(rc1, rc2)
   ## In your example, this line sets the color for values between 49 and 51. 
   # rampcols[nHalf] = rgb(t(col2rgb("white")), maxColorValue=256) 
   
@@ -99,8 +108,9 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   } else {
     rb2 <- Max
   }
-  rampbreaks = c(rb1, rb2)
-  
+  rampcols   <- c(rc1, rc2)
+  rampbreaks <- c(rb1, rb2)
+  }
   list(key    = rampbreaks, 
        colors = rampcols)
 }

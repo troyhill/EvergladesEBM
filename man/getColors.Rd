@@ -19,6 +19,8 @@ getColors(
 \item{colorGradient}{vector with three colors that form the gradient}
 
 \item{threshold}{value of gradient transition. This value will be the middle color listed in `colorGradient`}
+
+\item{type}{type of scale to be produced: 'continuous' (equal-interval) or 'interval' (unequal intervals).}
 }
 \value{
 A list with color codes and breaks
@@ -32,5 +34,9 @@ getColors(uniqueValues = range(-10:10), binSize = 3)
 getColors(uniqueValues = range(0:100), binSize = 5, threshold = 50) # odd behavior
 getColors(uniqueValues = range(0:99), binSize = 5, threshold = 50)
 getColors(uniqueValues = range(-13:67)/100, binSize = 0.025)
+
+### lop-sided categories with unequal sizes
+getColors2(uniqueValues = c(-365,-30, 0, 10, 30, 60, 365, 400, 700),
+ type = 'interval', binSize = 5, threshold = 0)
 
 }
