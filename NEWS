@@ -1,3 +1,8 @@
+EvergladesEBM version 0.0.04 (release date: TBD)
+==================
+* getColors handles lopsided (non-zero-centered) unequal intervals
+
+
 EvergladesEBM version 0.0.03 (release date: 2022-04-04)
 ==================
 * removed plyr, fireHydro, terra, raster, rgdal dependencies
