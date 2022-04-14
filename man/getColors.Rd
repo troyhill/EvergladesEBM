@@ -8,7 +8,8 @@ getColors(
   uniqueValues = c(-2:4)/10,
   binSize = 0.025,
   colorGradient = c("red", "white", "blue"),
-  threshold = 0
+  threshold = 0,
+  type = "continuous"
 )
 }
 \arguments{

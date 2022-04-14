@@ -31,7 +31,8 @@
 getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
                     binSize = 0.025,   # for asymmetries: https://stackoverflow.com/a/29280215
                     colorGradient = c("red", "white", "blue"),
-                    threshold     = 0) {
+                    threshold     = 0,
+                    type = 'continuous') {
   if(!grepl(x = tolower(type), pattern = 'continuous|interval')) {
     stop("'type' argument isn't valid. Acceptable inputs: 'continuous' or 'interval'\n")
   }
