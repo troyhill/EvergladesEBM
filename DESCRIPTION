@@ -14,9 +14,9 @@ URL: https://github.com/troyhill/EvergladesEBM
 LazyData: true
 Depends:
     R (>= 3.5.0),
-    terra,
+    ggplot2,
     ncdf4,
-    ggplot2
+    terra
 RoxygenNote: 7.1.2
 Suggests: 
     covr,

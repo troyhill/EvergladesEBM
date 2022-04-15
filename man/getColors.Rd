@@ -21,13 +21,13 @@ getColors(
 
 \item{threshold}{value of gradient transition. This value will be the middle color listed in `colorGradient`}
 
-\item{type}{type of scale to be produced: 'continuous' (equal-interval) or 'interval' (unequal intervals).}
+\item{type}{type of scale to be produced: 'continuous' (equally-sized intervals) or 'interval' (unequal intervals).}
 }
 \value{
 A list with color codes and breaks
 }
 \description{
-Converts feet to centimeters
+Generate a three-color gradient palette
 }
 \examples{
 getColors(uniqueValues = range(-10:10), binSize = 5)
@@ -37,7 +37,19 @@ getColors(uniqueValues = range(0:99), binSize = 5, threshold = 50)
 getColors(uniqueValues = range(-13:67)/100, binSize = 0.025)
 
 ### lop-sided categories with unequal sizes
-getColors2(uniqueValues = c(-365,-30, 0, 10, 30, 60, 365, 400, 700),
+getColors(uniqueValues = c(-365,-30, 0, 10, 30, 60, 365, 400, 700),
  type = 'interval', binSize = 5, threshold = 0)
+
+f <- system.file("ex/elev.tif", package="terra") 
+r <- rast(f)
+plot(r)
+
+cols <- getColors(uniqueValues = c(minmax(r)), binSize = 40, 
+        threshold = mean(c(minmax(r))))
+plot(r, breaks = cols$key, col = cols$colors)   
+
+cols <- getColors(uniqueValues = c(100, 195, 200, 205, 300, 350, 450, 550), binSize = 40, 
+        threshold = 200, type = 'interval')
+plot(r, breaks = cols$key, col = cols$colors)   
 
 }

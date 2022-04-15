@@ -1,12 +1,12 @@
 #' @title Generate a three-color gradient palette
 #'
-#' @description Converts feet to centimeters
+#' @description Generate a three-color gradient palette
 #' 
 #' @param uniqueValues    input values (or vector with max/min)
 #' @param binSize         size of increment between color gradations
 #' @param colorGradient   vector with three colors that form the gradient
 #' @param threshold       value of gradient transition. This value will be the middle color listed in `colorGradient`
-#' @param type            type of scale to be produced: 'continuous' (equal-interval) or 'interval' (unequal intervals).
+#' @param type            type of scale to be produced: 'continuous' (equally-sized intervals) or 'interval' (unequal intervals).
 #' 
 #' @return A list with color codes and breaks
 #' 
@@ -19,8 +19,21 @@
 #' getColors(uniqueValues = range(-13:67)/100, binSize = 0.025)
 #' 
 #' ### lop-sided categories with unequal sizes
-#' getColors2(uniqueValues = c(-365,-30, 0, 10, 30, 60, 365, 400, 700),
+#' getColors(uniqueValues = c(-365,-30, 0, 10, 30, 60, 365, 400, 700),
 #'  type = 'interval', binSize = 5, threshold = 0)
+#' 
+#' f <- system.file("ex/elev.tif", package="terra") 
+#' r <- rast(f)
+#' plot(r)
+#' 
+#' ### works, but why aren't there two white categories?
+#' cols <- getColors(uniqueValues = c(minmax(r)), binSize = 40, 
+#'         threshold = mean(c(minmax(r))))
+#' plot(r, breaks = cols$key, col = cols$colors)   
+#' 
+#' cols <- getColors(uniqueValues = c(100, 195, 200, 205, 300, 350, 450, 550), binSize = 40, 
+#'         threshold = 200, type = 'interval')
+#' plot(r, breaks = cols$key, col = cols$colors)   
 #' 
 #' @importFrom grDevices colorRampPalette
 #'  
@@ -38,12 +51,12 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   }
   breaks <- uniqueValues
   if (grepl(x = tolower(type), pattern = "^interval$")) {
-    center_index <- which.min(abs(breaks)- threshold)
+    center_index <- which.min(abs(breaks- threshold))
     # breaks_unindexed <- -floor((length(breaks))/2):ceiling((length(breaks)-3)/2)
     breaks_indexed <- 1:(length(breaks)-1) - center_index
     
     rampcols <- getColors(uniqueValues = breaks_indexed, 
-                           threshold = threshold, 
+                           threshold = 0, 
                            type      = 'continuous',
                            binSize   = 1)$colors
     rampbreaks <- breaks
