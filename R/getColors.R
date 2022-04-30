@@ -26,12 +26,19 @@
 #' r <- rast(f)
 #' plot(r)
 #' 
-#' ### works, but why aren't there two white categories?
+#' 
 #' cols <- getColors(uniqueValues = c(minmax(r)), binSize = 40, 
 #'         threshold = mean(c(minmax(r))))
 #' plot(r, breaks = cols$key, col = cols$colors)   
 #' 
-#' cols <- getColors(uniqueValues = c(100, 195, 200, 205, 300, 350, 450, 550), binSize = 40, 
+#' ### example with five colors
+#' cols <- getColors(uniqueValues = c(minmax(r)), binSize = 20, 
+#'    threshold = mean(c(minmax(r))) 
+#'    colorGradient = c("red", "yellow", "white", "green", "blue"))
+#' plot(r, col = cols$colors, type = 'continuous', breaks = cols$key)
+#' 
+#' cols <- getColors(uniqueValues = c(100, 195, 200, 205, 300, 350, 450, 550), 
+#'         binSize = 40, # binSize argument is irrelevant if type = 'interval'
 #'         threshold = 200, type = 'interval')
 #' plot(r, breaks = cols$key, col = cols$colors)   
 #' 
@@ -57,6 +64,7 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
     
     rampcols <- getColors(uniqueValues = breaks_indexed, 
                            threshold = 0, 
+                          colorGradient = colorGradient,
                            type      = 'continuous',
                            binSize   = 1)$colors
     rampbreaks <- breaks
@@ -109,18 +117,36 @@ getColors <- function(uniqueValues = c(-2:4)/10, # feet per week, e.g.
   Min <- min(uniqueValues_new, na.rm = TRUE)
   Max <- max(uniqueValues_new, na.rm = TRUE)
   
-  ## Make vector of colors for values below threshold
-  rc1 <- grDevices::colorRampPalette(colors = c(colorGradient[1], colorGradient[2]), space="Lab")(valsBelowThreshold)    
-  ## Make vector of colors for values above threshold
-  rc2 <- grDevices::colorRampPalette(colors = c(colorGradient[2], colorGradient[3]), space="Lab")(valsAboveThreshold)
-  ## In your example, this line sets the color for values between 49 and 51. 
-  # rampcols[nHalf] = rgb(t(col2rgb("white")), maxColorValue=256) 
-  
+  ### define breaks
   rb1 <- seq(from =  Min, to = Thresh, by = binSize) # length.out=nHalf+1)
   if ((Thresh + binSize) < Max) {
     rb2 <- seq(Thresh + binSize, Max, by = binSize) # length.out=nHalf+1
   } else {
     rb2 <- Max
+  }
+  
+  ### define colors
+  if (length(colorGradient) == 3) {
+    ## Make vector of colors for values below threshold
+    rc1 <- grDevices::colorRampPalette(colors = c(colorGradient[1], colorGradient[2]), space="Lab")(valsBelowThreshold)    
+    ## Make vector of colors for values above threshold
+    rc2 <- grDevices::colorRampPalette(colors = c(colorGradient[2], colorGradient[3]), space="Lab")(valsAboveThreshold)
+    ## In your example, this line sets the color for values between 49 and 51. 
+    # rampcols[nHalf] = rgb(t(col2rgb("white")), maxColorValue=256) 
+    
+  } else if (length(colorGradient) == 5) {
+    cols_p1 <- getColors(uniqueValues = rb1,
+              binSize = binSize,
+              threshold = mean(rb1), # median?
+              colorGradient = colorGradient[1:3])
+    cols_p2 <- getColors(uniqueValues = rb2,
+                         binSize = binSize,
+                         threshold = mean(rb2),
+                         colorGradient = colorGradient[3:5])
+    rc1 <- cols_p1$colors
+    rc2 <- cols_p2$colors
+  } else {
+      stop("`colorGradient` is limited to three or five colors.\n")
   }
   rampcols   <- c(rc1, rc2)
   rampbreaks <- c(rb1, rb2)

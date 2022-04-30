@@ -44,11 +44,19 @@ f <- system.file("ex/elev.tif", package="terra")
 r <- rast(f)
 plot(r)
 
+
 cols <- getColors(uniqueValues = c(minmax(r)), binSize = 40, 
         threshold = mean(c(minmax(r))))
 plot(r, breaks = cols$key, col = cols$colors)   
 
-cols <- getColors(uniqueValues = c(100, 195, 200, 205, 300, 350, 450, 550), binSize = 40, 
+### example with five colors
+cols <- getColors(uniqueValues = c(minmax(r)), binSize = 20, 
+   threshold = mean(c(minmax(r))) 
+   colorGradient = c("red", "yellow", "white", "green", "blue"))
+plot(r, col = cols$colors, type = 'continuous', breaks = cols$key)
+
+cols <- getColors(uniqueValues = c(100, 195, 200, 205, 300, 350, 450, 550), 
+        binSize = 40, # binSize argument is irrelevant if type = 'interval'
         threshold = 200, type = 'interval')
 plot(r, breaks = cols$key, col = cols$colors)   
 
