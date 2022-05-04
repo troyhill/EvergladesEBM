@@ -62,6 +62,9 @@ extractSimData <- function(simulationData,              # = datList,# *a list* o
   if(any(class(targetLocations) %in% c("SpatialPolygonsDataFrame", "SpatialPointsDataFrame", 'sf'))) {
     targetLocations <- terra::vect(targetLocations)
   }
+  if (nrow(targetLocations) == 1) { 
+    targetLocations <- rbind(targetLocations, targetLocations)
+    }
   ### convert EDEN data to terra, if necessary
   if(any(class(simulationData[[1]]) %in% c("RasterBrick", "RasterStack", "Raster", "raster"))) {
     ### if test is a raster:
@@ -110,6 +113,15 @@ extractSimData <- function(simulationData,              # = datList,# *a list* o
   traces_locs <- traces_locs[!is.na(traces_locs$date), ] # using terra introduced some artifacts
   if (length(targetLocations) == 1) { # otherwise, name will appear as "t.raster..extract.x..y...targetLocations..fun...func..na.rm...TRUE.."
     names(traces_locs)[1] <- "X1"
+  }
+  
+  if (nrow(traces_locs) > nrow(expand.grid(unique(traces_locs$simulation), unique(traces_locs$date)))) {
+    ### there are duplicate dates in 20220501 data, wtf? average by simulation, date (November 6 2022 in first simulation)
+    ### this detects and takes the first duplicate, discards others
+    # for (i in 1:length(duplicated(traces_locs[, c(ncol(traces_locs):ncol(traces_locs))]))
+    no_dups <- !duplicated(paste0(traces_locs$simulation, "-", traces_locs$date))
+    traces_locs <- traces_locs[no_dups, ] 
+    cat(sum(!no_dups), " duplicated simulation-date combinations removed\n")
   }
   
   traces_locs_long <- stats::reshape(traces_locs, 
