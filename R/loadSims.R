@@ -52,10 +52,11 @@ loadSims <- function(directory = file.choose()
   nc_tmp     <- ncdf4::nc_open(fileNames[1])
   ### get dates
   ### returns a posixlt vector of dates from a netCDF (converting units from "days from XXXX-XX-XX")
+  ### start datetime
   tdstr   <- paste0(unlist(strsplit(unlist(strsplit(ncdf4::ncatt_get(nc_tmp, 'time', "units")$value, " "))[3], "-")), collapse = "-")
   tdstr   <- substr(x = tdstr, start = 1, stop = 10) # remove T12:00:00, if present
-  dateVec <- format(as.POSIXlt(as.POSIXlt(tdstr, format = "%Y-%m-%d") + 
-                                 ncdf4::ncvar_get(nc_tmp, 'time')*60*60*24), format = "%Y-%m-%d")
+  dateVec <- format(as.Date(as.Date(tdstr, format = "%Y-%m-%d") + # using POSIXlt was resulting in odd behaviour, very infrequent duplicate dates
+                                 ncdf4::ncvar_get(nc_tmp, 'time')), format = "%Y-%m-%d")
   lon     <- ncdf4::ncvar_get(nc_tmp, "x", verbose = F) # meters state plane
   # lon[lon > 180] <- lon[lon > 180] - 360
   lat     <- ncdf4::ncvar_get(nc_tmp, "y", verbose = F) # may need to reverse this per https://stackoverflow.com/a/20629634/3723870

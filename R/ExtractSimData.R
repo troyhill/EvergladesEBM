@@ -62,8 +62,11 @@ extractSimData <- function(simulationData,              # = datList,# *a list* o
   if(any(class(targetLocations) %in% c("SpatialPolygonsDataFrame", "SpatialPointsDataFrame", 'sf'))) {
     targetLocations <- terra::vect(targetLocations)
   }
+  remove_duplicate_data <- FALSE
   if (nrow(targetLocations) == 1) { 
     targetLocations <- rbind(targetLocations, targetLocations)
+    targetLocationNames <- c(targetLocationNames, targetLocationNames)
+    remove_duplicate_data <- TRUE
     }
   ### convert EDEN data to terra, if necessary
   if(any(class(simulationData[[1]]) %in% c("RasterBrick", "RasterStack", "Raster", "raster"))) {
@@ -91,7 +94,7 @@ extractSimData <- function(simulationData,              # = datList,# *a list* o
   cat("Extracting simulation data for each target location. This may take a while... \n")
   extracted.int   <- lapply(simulationData, function(x) { # takes a LONG time
     x.df          <- data.frame(t(terra::extract(x, y = targetLocations, fun = func, na.rm = TRUE)))
-    x.df
+    x.df          <- x.df[!grepl(x = row.names(x.df), pattern = 'ID'), ] # noticed an ID row is appearing as data
   })
   
   ### get start date from simulation data
@@ -118,7 +121,7 @@ extractSimData <- function(simulationData,              # = datList,# *a list* o
   if (nrow(traces_locs) > nrow(expand.grid(unique(traces_locs$simulation), unique(traces_locs$date)))) {
     ### there are duplicate dates in 20220501 data, wtf? average by simulation, date (November 6 2022 in first simulation)
     ### this detects and takes the first duplicate, discards others
-    # for (i in 1:length(duplicated(traces_locs[, c(ncol(traces_locs):ncol(traces_locs))]))
+    ### issue resolve by changing date column from posixlt to date class 
     no_dups <- !duplicated(paste0(traces_locs$simulation, "-", traces_locs$date))
     traces_locs <- traces_locs[no_dups, ] 
     cat(sum(!no_dups), " duplicated simulation-date combinations removed\n")
@@ -128,20 +131,30 @@ extractSimData <- function(simulationData,              # = datList,# *a list* o
                               direction = "long",
                               varying = list(names(traces_locs)[1:c(ncol(traces_locs) - 2)]),
                               v.names = "value",
-                              timevar = "time", # change to "location_number" (requires updating package data (polyDat))
+                              timevar = "roi", # change to "roi" (requires updating package data (polyDat))
                               idvar = c("simulation", "date"))
-  newDF                 <- data.frame(time = 1:length(targetLocationNames), name = targetLocationNames) # change "time" to "location_number"
-  traces_locs_long$name <- newDF$name[match(traces_locs_long$time, newDF$time)] # change "time" to "location_number"
+  newDF                 <- data.frame(roi = 1:length(targetLocationNames), name = targetLocationNames) # change "time" to "roi"
+  traces_locs_long$name <- newDF$name[match(traces_locs_long$roi, newDF$roi)] # change "time" to "roi"
   
+ 
   for (i in 1:length(targetLocations)) {
     if (i == 1) featureDat <- list()
     featureDat[[i]] <-  data.frame(t(sapply(extracted.int, '[[', i))) # transpose, so that each day is a column
     featureDat[[i]] <-  featureDat[[i]][, -1] # remove day 1; all values are the same (all simulations have the same starting point)
   }
   
+  if (remove_duplicate_data == TRUE) {
+    ### if there's really only one region of interest, remove duplicated data
+    extracted.int <- lapply(X = extracted.int, FUN = function(x) {x <- data.frame(X1 = x[, -c(ncol(x))])}) # one column per location, so want to remove ncol(x) for each dataframe
+    featureDat    <- featureDat[[1]] # only one ROI, so only first list is needed
+    traces_locs   <- traces_locs[, !grepl(x = names(traces_locs), pattern = 'X2')]
+    no_dups       <- !duplicated(paste0(traces_locs_long$simulation, "-", traces_locs_long$date, "-", traces_locs_long$name))
+    traces_locs_long <- traces_locs_long[no_dups, ]
+  }
+  
   ### return all useful objects in a list
   list(listOfSims      = extracted.int,    # a list with one dataframe per simulation, columns = locations, rows = days
-       listOfLocations = featureDat,  # a list with a dataframe for each IR: rows = 100 simulations, columns = 182 days  (Day 1 is removed)
+       listOfLocations = featureDat,       # a list with a dataframe for each IR: rows = 100 simulations, columns = 182 days  (Day 1 is removed)
        traceDataWide   = traces_locs,      # a single dataframe, semi-wide form, with one row per simulation-date
        traceDataLong   = traces_locs_long) # a single dataframe, long form, with one row per location-simulation-date
 }
