@@ -39,7 +39,7 @@ rsconnect/
 .Rproj.user
 *.R
 !/R/*.R
-/docs/*.png
+/docs/.*.png
 /docs/pdf/*
 /docs/shp/*
 !/docs/script_updateFigures.R
