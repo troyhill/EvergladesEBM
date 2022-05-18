@@ -39,8 +39,14 @@ rsconnect/
 .Rproj.user
 *.R
 !/R/*.R
-\\docs\\**\\*.png
-\\docs\\**\\*.Rmd
+docs/libs/
+docs/vignettes/
+docs/figures/
+docs/slides/
+docs/**/*.png
+docs/**/*.jpg
+docs/**/*.pdf
+docs/**/*.Rmd
 /docs/pdf/*
 /docs/shp/*
 !/docs/script_updateFigures.R
@@ -59,7 +65,6 @@ rsconnect/
 *.shp
 *.shx
 *.tif
-\\docs\\*.Rmd
 *.tif.aux.xml
 !\\inst\\.*.gri
 !\\inst\\.*.grd
