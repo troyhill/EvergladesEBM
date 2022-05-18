@@ -2,17 +2,19 @@
 .Rhistory
 .Rapp.history
 # Session Data files
-.RData
 /*.Rproj
 .Rhistory
-.RData
 .Ruserdata
-# Output files from getFireHydro()
+# Output files
 .png$
 *.gif
 /*.png
 /*.pdf
 /*.gpkg
+*.RData
+*.csv
+*.zip
+!\\data\\.*.RData
 # Example code in package build process
 *-Ex.R
 # Output files from R CMD build
