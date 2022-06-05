@@ -45,6 +45,7 @@ docs/libs/
 docs/figures/
 docs/slides/
 docs/**/*.png
+docs/figures/*.png
 docs/**/*.jpg
 docs/**/*.pdf
 docs/**/*.Rmd
