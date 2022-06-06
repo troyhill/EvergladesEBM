@@ -6,9 +6,9 @@
 .Rhistory
 .Ruserdata
 # Output files
-.png$
+.png
+*.png
 *.gif
-/*.png
 /*.pdf
 /*.gpkg
 *.RData
@@ -44,8 +44,9 @@ rsconnect/
 docs/libs/
 docs/figures/
 docs/slides/
+docs/figures/BISC_inflows.png
 docs/**/*.png
-docs/figures/*.png
+docs/*./*.png
 docs/**/*.jpg
 docs/**/*.pdf
 docs/**/*.Rmd
