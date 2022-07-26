@@ -51,7 +51,7 @@ plot(r, breaks = cols$key, col = cols$colors)
 
 ### example with five colors
 cols <- getColors(uniqueValues = c(minmax(r)), binSize = 20, 
-   threshold = mean(c(minmax(r))) 
+   threshold = mean(c(minmax(r))),
    colorGradient = c("red", "yellow", "white", "green", "blue"))
 plot(r, col = cols$colors, type = 'continuous', breaks = cols$key)
 

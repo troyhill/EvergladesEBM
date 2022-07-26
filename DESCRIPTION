@@ -12,12 +12,13 @@ Description: Analytical tools supporting ecosystem based management in south Flo
 License: file LICENSE
 URL: https://github.com/troyhill/EvergladesEBM
 LazyData: true
+LazyDataCompression: xz
 Depends:
     R (>= 3.5.0),
     ggplot2,
     ncdf4,
     terra
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Suggests: 
     covr,
     testthat,

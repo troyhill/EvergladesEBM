@@ -21,25 +21,25 @@
 
 
 
-hydroperiod <- function(x, threshold = 0, continuous = TRUE, percent = FALSE) {
+hydroperiod <- function(data, threshold = 0, continuous = TRUE, percent = FALSE) {
   
   if (continuous) {
-    newDat     <- logical(length = length(x))
-    newDat[x >= threshold] <- TRUE 
+    newDat     <- logical(length = length(data))
+    newDat[data >= threshold] <- TRUE 
     tmpDat     <- rle(newDat)
     targetRuns <- tmpDat$lengths[tmpDat$values == TRUE] # lengths of runs with values above threshold
     
     if (sum(newDat, na.rm = TRUE) > 0) { # for cases where there are no TRUE values
       outDat      <- max(targetRuns, na.rm = TRUE)
-      numberOfObs <- sum(!is.na(x))
+      numberOfObs <- sum(!is.na(data))
     } else {
       outDat      <- 0
       numberOfObs <- 0
     } 
   }
   if (continuous == FALSE) { # for discontinuous hydroperiod
-    outDat      <- length(which(x[!is.na(x)] >= threshold)) # exclude NAs
-    numberOfObs <- sum(!is.na(x))
+    outDat      <- length(which(data[!is.na(data)] >= threshold)) # exclude NAs
+    numberOfObs <- sum(!is.na(data))
   }
   if (percent == TRUE) {
     outDat     <- outDat / numberOfObs

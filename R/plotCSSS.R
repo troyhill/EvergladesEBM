@@ -45,7 +45,9 @@
 #' @importFrom terra vect
 #' @importFrom graphics par
 #' @importFrom grDevices png
-#' @importFrom grDevices dev.off
+#' @importFrom terra ext
+#' @importFrom utils tail
+#' @importFrom graphics mtext
 #'  
 #' @export
 
@@ -162,7 +164,7 @@ plotCSSS <- function(areaOfInterest, # spdf; readOGR(system.file("extdata/gis/mi
        col = area.cats$color[sort(unique(terra::values(subA_cats, na.rm = TRUE)[, 1]) + 1)]) # pal(4))
   terra::plot(areaOfInterest, add = TRUE)
   ### add scale bar
-  barLength <- (extent(subA_cats)[2] - extent(subA_cats)[1])/10
+  barLength <- (terra::ext(subA_cats)[2] - terra::ext(subA_cats)[1])/10
   terra::sbar(barLength, label = paste0(round(barLength/1e3), " km"))
   
   graphics::mtext(text = title_text, side = 3, cex = 1.3)
