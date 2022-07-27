@@ -165,8 +165,9 @@ plotEDENChange <- function(EDEN_end    = Sys.Date() - as.numeric(format(Sys.Date
     graphics::par(mar = c(0.5, 0.5, 3.25, 0.5))
   }
   terra::plot(recRatesReclassed,
-              legend = FALSE,
-              col = colorNames, axes = FALSE, #box=FALSE,
+              legend = F, # doesn't work in development version of terra, so we need a workaround
+              plg=list(x = 0, y = 0, title = ''),
+              col = colorNames, axes = FALSE, 
               main = mainTitle)
   graphics::legend("topleft",
                    legend = categoryNames,
