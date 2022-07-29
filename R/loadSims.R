@@ -45,7 +45,8 @@ loadSims <- function(directory = file.choose()
   # load("C:/RDATA/EVER4cast/NGVD_to_NAVD.RData") # loads convertNGVD, a raster surface of elevations NAVD88 rel to NGVD29. Units = feet. to convert NAVD88 to NGVD29, add this. subtract from NGVD29 to get NAVD88.
   dem_eden   <- terra::rast(system.file("extdata/edenDEM.grd", package = "fireHydro")) # DEM used in eden data 9meters NAVD88)
   newCRS     <- terra::crs(dem_eden, proj = TRUE)
-  dem_ngvd   <- (dem_eden * 3.2808) + terra::project(x = terra::rast(EvergladesEBM::convertNGVD), y = dem_eden) # EvergladesEBM::convertNGVD end units: feet NGVD29
+  dem_ngvd   <- (dem_eden * 3.2808) + terra::project(x = terra::rast(system.file("extdata/convertNGVD.grd", package = "EvergladesEBM")), y = dem_eden) # EvergladesEBM::convertNGVD end units: feet NGVD29
+  # dem_ngvd   <- (dem_eden * 3.2808) + terra::project(x = terra::rast(EvergladesEBM::convertNGVD), y = dem_eden) # EvergladesEBM::convertNGVD end units: feet NGVD29
   fileNames  <- grep(list.files(directory, full.names = TRUE), pattern = ".nc$", value = TRUE) # find .nc files in data folder
   
   ### ndcf4 usage - can likely remove as terra develops
