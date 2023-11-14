@@ -2,7 +2,6 @@
 
 
 
-
 ## What you have here
 
 `EvergladesEBM` is an R package to support ecosystem based management in south Florida.
